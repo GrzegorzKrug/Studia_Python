@@ -36,14 +36,29 @@ from oracle import encrypt, is_padding_ok, BLOCK_SIZE, _decrypt
 ##	return guessed_clear[:-guessed_clear[-1]] #remove padding!
 
 def attack(ciphertext):
-        output = b''
-        blocks = get_blocks(ciphertext, BLOCK_SIZE)
-        for i in range( 0, 256 ):
-                fake_cipher = spliced_ciphertext[:byte] + attack_str + hacked_ciphertext_tail + spliced_ciphertext[byte + 1 + new_pad_len - 1:]
-        return output
+    output = b''
+    blocks = get_blocks(ciphertext, BLOCK_SIZE)
+        
+    for block_n in range( len(blocks) - 1, 0, -1 ):  # pairs of blocks starting from end of message
+            spliced_ciphertext = blocks[block_n - 1] + blocks[block_n]
+                
+            for byte in range(BLOCK_SIZE - 1, -1, -1):
+                    hacked_ciphertext_tail = b''
+                    new_pad_len = BLOCK_SIZE - byte
+                    
+                    for i in range(1, 256 ):
+                            attack_str = bytearray.fromhex( '{:02x}'.format( ( i ^ spliced_ciphertext[byte] ) ) )
+                            fake_cipher = spliced_ciphertext[:byte] + attack_str + hacked_ciphertext_tail + spliced_ciphertext[byte + 1 + new_pad_len - 1:]
+                            if( is_padding_ok( fake_cipher ) ):
+                                print(f"true {i}")
+
+
+
+                            
+    return output
 
 def get_blocks(ciphertext, siz):
-        out = [ciphertext[i:i+siz] for i in range(0, len(ciphertext), siz)]        
+        out = [ciphertext[i:i+siz] for i in range(0, len(ciphertext), siz)]
         return out
 
 def run():
