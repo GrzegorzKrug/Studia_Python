@@ -1,3 +1,8 @@
+*.json
+*.csv
+*.idea
+*secret_token*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -47,7 +52,6 @@ htmlcov/
 nosetests.xml
 coverage.xml
 *.cover
-*.py,cover
 .hypothesis/
 .pytest_cache/
 
@@ -59,7 +63,6 @@ coverage.xml
 *.log
 local_settings.py
 db.sqlite3
-db.sqlite3-journal
 
 # Flask stuff:
 instance/
@@ -123,3 +126,5 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+TwitterAnalyzer/Analyzer/220_kookaburra.png
