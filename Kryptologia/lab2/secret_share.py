@@ -5,5 +5,5 @@ from Crypto.Random import get_random_bytes
 from Crypto.Protocol.SecretSharing import Shamir
 
 
-key = get_random_bytes(16)
-shares = Shamir.split(2, 5, key)
+# key = get_random_bytes(16)
+# shares = Shamir.split(2, 5, key)
