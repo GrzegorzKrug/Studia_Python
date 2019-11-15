@@ -5,7 +5,7 @@ from Crypto.Random import get_random_bytes
 import random
 # from Crypto.Protocol.SecretSharing import Shamir
 import sys
-sys.setrecursionlimit(1000000)
+#sys.setrecursionlimit(1000000)
 
 
 class SecretShare:
@@ -32,6 +32,7 @@ class SecretShare:
 	def createShares(self):		
 		n = self.shareNum		
 		self.p = 2*self.M + 1  # modular value
+		print(f"Modulator P: {self.p}")
 		if (self.prog > self.shareNum):
 			raise ValueError(f"Cieni mniej niż prog potrzebny do odworzenia!")
 
@@ -48,8 +49,6 @@ class SecretShare:
 			s, txt = poly(i+1)
 			s = s % self.p
 			self.shares += [s]
-			# print(f"Share {i+1} = {s}")
-		#print(f"Coeffs: {coeffs}")
 
 	def reconstruct(self, shadows):		
 		out = 0
@@ -57,7 +56,7 @@ class SecretShare:
 		
 		#print(f"shadows {shadows}")
 		random.shuffle(shadows)
-		shadows = shadows[:3]
+		shadows = shadows[:self.prog]
 		#print(f"shadows {shadows}")
 		X = 0  # const
 		for i, sh in enumerate(shadows):
@@ -170,7 +169,7 @@ if __name__ == '__main__':
 	app.run()
 	
 	print()
-	app = SecretShare(secretInput=get_random_bytes(5), shareNum=10, prog=6, quiet=False)
+	app = SecretShare(secretInput=get_random_bytes(5), shareNum=15, prog=15, quiet=False)
 	app.run()
 
 	input('End....')
