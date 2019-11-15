@@ -30,7 +30,8 @@ class SecretShare:
 		n = self.shareNum		
 		#self.p = 2*self.M + 1  # modular value
 		self.p = nextprime(self.M)
-		print(f"Modulator P: {self.p}")
+		if not self.quiet:
+			print(f"P = {self.p}")
 		if (self.prog > self.shareNum):
 			raise ValueError(f"Cieni mniej niż prog potrzebny do odworzenia!")
 
