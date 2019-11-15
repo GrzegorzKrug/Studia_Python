@@ -193,3 +193,4 @@ if __name__ == '__main__':
 	
 	#app = SecretShare(secretInput=get_random_bytes(5), shareNum=15, prog=10, quiet=False)
 	#app.run()
+	input('\nEnd....')
