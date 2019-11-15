@@ -2,7 +2,11 @@ import numpy as np
 # from binascii import hexlify
 # from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
+import random
 # from Crypto.Protocol.SecretSharing import Shamir
+import sys
+sys.setrecursionlimit(1000000)
+
 
 class SecretShare:
 	def __init__(self, secretInput=None, shareNum=3, quiet=True):
@@ -15,13 +19,14 @@ class SecretShare:
 		self.shareNum = shareNum		
 		#self.regions = [Region(3), Region(4), Region(10)]	
 		self.M = int.from_bytes(self.secret, byteorder='big')
-		self.S = None
+		self.shares = None
+		self.p = None
 		self.quiet = quiet
 
 	def createShares(self, n):		
 		p = 2*self.M + 1
-		p = 13 # FIX
-		if not (self.M > n and self.M < p):
+		self.p = 13
+		if not (self.M > n and self.M < self.p):
 			print(f"Error: M < n or M > p")
 
 		coeffs = [self.M]
@@ -32,15 +37,37 @@ class SecretShare:
 		poly = Polynomial(coeffs)
 		if not self.quiet:
 			print(poly)		
-		self.S = []
+		self.shares = []
 
 		for i in range(n):
 			s, txt = poly(i+1)
-			s = s % p
-			self.S += [s]
+			s = s % self.p
+			self.shares += [s]
 			# print(f"Share {i+1} = {s}")
-
 		#print(f"Coeffs: {coeffs}")
+
+	def reconstruct(self, shadows):		
+		out = 0
+		shadows = [{'xi': i+1, 'm': sh} for i, sh in enumerate(shadows)]
+		
+		#print(f"shadows {shadows}")
+		#random.shuffle(shadows)
+		shadows = [shadows[i] for i in [1, 2, 4]]
+		print(f"shadows {shadows}")
+		X = 0  # const
+		for i, sh in enumerate(shadows):
+			res = 1
+			for j in range(len(shadows)):
+				if j == i:
+					continue
+				a = (X - shadows[j]['m']) % self.p
+				b = sh['m'] - shadows[j]['m']
+				b = ModularInverse.mulinv(abs(b), self.p)
+				res *=  a * b
+
+			out += (sh['m'] * res)
+		return out
+
 
 	def run(self):		
 		A = ([bt ^ 125 for bt in self.secret])  # secret ^ 125
@@ -55,6 +82,9 @@ class SecretShare:
 			for i, s in enumerate(self.S):
 				print(f"Share {i+1} = {s}")
 
+
+		out = self.reconstruct(self.shares)
+
 		if out == self.secret:
 			print("Secret is the same")
 			print(f"Odtworzony sekret:\n{self.concatenateBytes(out)}")			
@@ -63,9 +93,7 @@ class SecretShare:
 			try:
 				print(f"{self.concatenateBytes(out)}")
 			except TypeError:
-				print(f"{out}")
-		x = ModularInverse.mulinv(17, 43)  # TO DO
-		print(f"Inverse modulo 17^-1%43 = {x}")
+				print(f"{out}")				
 
 	def translateByteToText(self, textin):
 		return ''.join([chr(o) for o in textin])
@@ -116,14 +144,16 @@ class ModularInverse:
 	        return (b, 0, 1)
 	    else:
 	        g, x, y = cls.egcd(b % a, a)
-	        return (g, y - (b // a) * x, x)
+			return (g, y - (b // a) * x, x)
 
 	@classmethod
 	def mulinv(cls, a, b):
 	    """return x such that (x * a) % b == 1"""
-	    g, x, _ = cls.xgcd(a, b)
-	    if g == 1:
-        	return x % b
+		g, x, _ = cls.xgcd(a, b)
+		if g == 1:
+			return x % b
+		else:
+			raise ValueError("Not found modular inversion!")
 
 
 class Region:
@@ -139,5 +169,6 @@ if __name__ == '__main__':
 	app = SecretShare(secretInput=get_random_bytes(30))
 	#app.run()
 
-	#a = ModularInverse.mulinv(17, 43)
+	a = ModularInverse.mulinv(2, 13)
+	print(f'INV mod {a}')
 	input('End....')
