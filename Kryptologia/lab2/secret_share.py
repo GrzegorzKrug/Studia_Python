@@ -1,11 +1,8 @@
 import numpy as np
-# from binascii import hexlify
-# from Crypto.Cipher import AES
+from sympy import nextprime
 from Crypto.Random import get_random_bytes
 import random
-# from Crypto.Protocol.SecretSharing import Shamir
 import sys
-#sys.setrecursionlimit(1000000)
 
 
 class SecretShare:
@@ -31,7 +28,8 @@ class SecretShare:
 
 	def createShares(self):		
 		n = self.shareNum		
-		self.p = 2*self.M + 1  # modular value
+		#self.p = 2*self.M + 1  # modular value
+		self.p = nextprime(self.M)
 		print(f"Modulator P: {self.p}")
 		if (self.prog > self.shareNum):
 			raise ValueError(f"Cieni mniej niż prog potrzebny do odworzenia!")
@@ -49,6 +47,7 @@ class SecretShare:
 			s, txt = poly(i+1)
 			s = s % self.p
 			self.shares += [s]
+		return self.shares
 
 	def reconstruct(self, shadows):		
 		out = 0
@@ -164,12 +163,32 @@ class Region:
 
 
 if __name__ == '__main__':
-	#app = SecretShare(secretInput=get_random_bytes(2))
-	app = SecretShare(secretInput=b'\x0B', shareNum=3, prog=3, quiet=False)
-	app.run()
+	SECRET = get_random_bytes(3)
+	dealer = SecretShare(secretInput=SECRET, shareNum=3, prog=3, quiet=False)
 	
-	print()
-	app = SecretShare(secretInput=get_random_bytes(5), shareNum=15, prog=15, quiet=False)
-	app.run()
+	S = dealer.createShares()
 
-	input('End....')
+	print(f"Main Secret:\n{SECRET}")
+	print(f"Shadows for Regions: {S}")
+	
+	s1 = str(S[0]).encode()
+	s2 = str(S[1]).encode()
+	s3 = str(S[2]).encode()
+
+	
+	region1 = SecretShare(secretInput=s1, shareNum=6, prog=3, quiet=False)
+	region2 = SecretShare(secretInput=s2, shareNum=4, prog=3, quiet=False)
+	region3 = SecretShare(secretInput=s3, shareNum=10, prog=6, quiet=False)
+
+	dealer.run()
+	print('\nRegion 1')
+	region1.run()
+
+	print('\nRegion 2')
+	region2.run()
+
+	print('\nRegion 3')
+	region3.run()
+	
+	#app = SecretShare(secretInput=get_random_bytes(5), shareNum=15, prog=10, quiet=False)
+	#app.run()
