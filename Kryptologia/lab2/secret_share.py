@@ -9,34 +9,39 @@ sys.setrecursionlimit(1000000)
 
 
 class SecretShare:
-	def __init__(self, secretInput=None, shareNum=3, quiet=True):
+	def __init__(self, shareNum, prog, secretInput=None, quiet=True):
 		if not secretInput:
-				self.secret = [bt for bt in get_random_bytes(10)]
+			self.secret = [bt for bt in get_random_bytes(10)]
 		else:
 			self.secret = [bt for bt in secretInput]
 		
-		self.complexity = len(self.secret)	
-		self.shareNum = shareNum		
-		#self.regions = [Region(3), Region(4), Region(10)]	
-		self.M = int.from_bytes(self.secret, byteorder='big')
-		self.shares = None
-		self.p = None
+		self.complexity = len(self.secret)	# complexity in byte's num
+		#print(f"Complex: {self.complexity}")
+		self.shareNum = shareNum
+		self.prog = prog		
 		self.quiet = quiet
 
-	def createShares(self, n):		
-		p = 2*self.M + 1
-		self.p = 13
-		if not (self.M > n and self.M < self.p):
-			print(f"Error: M < n or M > p")
+		#self.regions = [Region(3), Region(4), Region(10)]	
+		self.M = int.from_bytes(self.secret, byteorder='big')
+		#print(f" suma {sum(self.secret)}")
+		#print(f" M {self.M}")
+		self.shares = None
+		self.p = None
+		
 
-		coeffs = [self.M]
-		coeffs = [11, 8, 7] # FIX
-		# for i in range(n-1):
-		# 	coeffs += [int.from_bytes(get_random_bytes(self.complexity),
-		# 				byteorder='big')]
+	def createShares(self):		
+		n = self.shareNum		
+		self.p = 2*self.M + 1  # modular value
+		if (self.prog > self.shareNum):
+			raise ValueError(f"Cieni mniej niż prog potrzebny do odworzenia!")
+
+		coeffs = [self.M]		
+		for i in range(self.prog - 1):
+			coeffs += [int.from_bytes(get_random_bytes(self.complexity),
+						byteorder='big')]
 		poly = Polynomial(coeffs)
-		if not self.quiet:
-			print(poly)		
+		# if not self.quiet:
+		# 	print(poly)		
 		self.shares = []
 
 		for i in range(n):
@@ -51,43 +56,41 @@ class SecretShare:
 		shadows = [{'xi': i+1, 'm': sh} for i, sh in enumerate(shadows)]
 		
 		#print(f"shadows {shadows}")
-		#random.shuffle(shadows)
-		shadows = [shadows[i] for i in [1, 2, 4]]
-		print(f"shadows {shadows}")
+		random.shuffle(shadows)
+		shadows = shadows[:3]
+		#print(f"shadows {shadows}")
 		X = 0  # const
 		for i, sh in enumerate(shadows):
 			res = 1
 			for j in range(len(shadows)):
 				if j == i:
 					continue
-				a = (X - shadows[j]['m']) % self.p
-				b = sh['m'] - shadows[j]['m']
-				b = ModularInverse.mulinv(abs(b), self.p)
+				a = (X - shadows[j]['xi']) % self.p
+				b = sh['xi'] - shadows[j]['xi']
+				if b < 0:
+					b += self.p
+				b = ModularInverse.mulinv(b, self.p)
+				#print(f"{a} // {b}")
 				res *=  a * b
 
 			out += (sh['m'] * res)
-		return out
+		return out % self.p
 
-
-	def run(self):		
-		A = ([bt ^ 125 for bt in self.secret])  # secret ^ 125
-		#out = ([bt ^ 125 for bt in A])
+	def run(self):				
 		out = None
 		if not self.quiet:
 			print(f"\nSekret:\n{self.concatenateBytes(self.secret)}")
 			print(f"Sekret liczbowo: {self.M}")
 
-		self.createShares(self.shareNum)
+		self.createShares()
 		if not self.quiet:
-			for i, s in enumerate(self.S):
+			for i, s in enumerate(self.shares):
 				print(f"Share {i+1} = {s}")
-
 
 		out = self.reconstruct(self.shares)
 
-		if out == self.secret:
-			print("Secret is the same")
-			print(f"Odtworzony sekret:\n{self.concatenateBytes(out)}")			
+		if out == self.M:			
+			print(f"Secret is the same:\n{out}")			
 		else:
 			print("Secret is not the same!")
 			try:
@@ -163,12 +166,11 @@ class Region:
 
 if __name__ == '__main__':
 	#app = SecretShare(secretInput=get_random_bytes(2))
-	app = SecretShare(secretInput=b'\x0B', shareNum=5)
+	app = SecretShare(secretInput=b'\x0B', shareNum=3, prog=3, quiet=False)
+	app.run()
+	
+	print()
+	app = SecretShare(secretInput=get_random_bytes(5), shareNum=10, prog=6, quiet=False)
 	app.run()
 
-	app = SecretShare(secretInput=get_random_bytes(30))
-	#app.run()
-
-	a = ModularInverse.mulinv(2, 13)
-	print(f'INV mod {a}')
 	input('End....')
