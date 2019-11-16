@@ -77,7 +77,7 @@ class SecretShare:
 			self.quiet = quiet
 		out = None
 		if not self.quiet:
-			print(f"\nSekret:\n{self.concatenateBytes(self.secret)}")
+			print(f"Sekret:\n{self.concatenateBytes(self.secret)}")
 			print(f"Sekret liczbowo: {self.M}")
 
 		t0 = time.time()
@@ -175,11 +175,11 @@ if __name__ == '__main__':
 	print(f"Main Secret:\n{SECRET}")
 	print(f"Shadows for Regions: {S}")
 	
-	s1 = str(S[0]).encode()
-	print(s1)
-	s2 = str(S[1]).encode()
-	s3 = str(S[2]).encode()
-
+	#s1 = str(S[0]).encode()	
+	s1 = (S[0]).to_bytes(10, byteorder='big')
+	s2 = (S[1]).to_bytes(10, byteorder='big')
+	s3 = (S[2]).to_bytes(10, byteorder='big')
+	#print(s1)
 	
 	region1 = SecretShare(secretInput=s1, shareNum=6, prog=3, quiet=False)
 	region2 = SecretShare(secretInput=s2, shareNum=4, prog=3, quiet=False)
