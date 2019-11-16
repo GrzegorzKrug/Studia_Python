@@ -3,7 +3,7 @@ from sympy import nextprime
 from Crypto.Random import get_random_bytes
 import random
 import sys
-
+import time
 
 class SecretShare:
 	def __init__(self, shareNum, prog, secretInput=None, quiet=True):
@@ -27,11 +27,10 @@ class SecretShare:
 		
 
 	def createShares(self):		
-		n = self.shareNum		
-		#self.p = 2*self.M + 1  # modular value
+		n = self.shareNum				
 		self.p = nextprime(self.M)
-		if not self.quiet:
-			print(f"P = {self.p}")
+		# if not self.quiet:
+			# print(f"P = {self.p}")
 		if (self.prog > self.shareNum):
 			raise ValueError(f"Cieni mniej niż prog potrzebny do odworzenia!")
 
@@ -57,7 +56,6 @@ class SecretShare:
 		#print(f"shadows {shadows}")
 		random.shuffle(shadows)
 		shadows = shadows[:self.prog]
-		#print(f"shadows {shadows}")
 		X = 0  # const
 		for i, sh in enumerate(shadows):
 			res = 1
@@ -69,24 +67,28 @@ class SecretShare:
 				if b < 0:
 					b += self.p
 				b = ModularInverse.mulinv(b, self.p)
-				#print(f"{a} // {b}")
 				res *=  a * b
 
 			out += (sh['m'] * res)
 		return out % self.p
 
-	def run(self):				
+	def run(self, quiet=None):
+		if not quiet is None:
+			self.quiet = quiet
 		out = None
 		if not self.quiet:
 			print(f"\nSekret:\n{self.concatenateBytes(self.secret)}")
 			print(f"Sekret liczbowo: {self.M}")
 
+		t0 = time.time()
 		self.createShares()
 		if not self.quiet:
 			for i, s in enumerate(self.shares):
 				print(f"Share {i+1} = {s}")
 
 		out = self.reconstruct(self.shares)
+		t_end = time.time() - t0
+		print(f"Encoding and decoding time: {t_end}")
 
 		if out == self.M:			
 			print(f"Secret is the same:\n{out}")			
@@ -165,14 +167,16 @@ class Region:
 
 if __name__ == '__main__':
 	SECRET = get_random_bytes(3)
-	dealer = SecretShare(secretInput=SECRET, shareNum=3, prog=3, quiet=False)
-	
+	dealer = SecretShare(secretInput=SECRET, shareNum=3, prog=3, quiet=True)
+	dealer.run()
+
 	S = dealer.createShares()
 
 	print(f"Main Secret:\n{SECRET}")
 	print(f"Shadows for Regions: {S}")
 	
 	s1 = str(S[0]).encode()
+	print(s1)
 	s2 = str(S[1]).encode()
 	s3 = str(S[2]).encode()
 
@@ -181,7 +185,7 @@ if __name__ == '__main__':
 	region2 = SecretShare(secretInput=s2, shareNum=4, prog=3, quiet=False)
 	region3 = SecretShare(secretInput=s3, shareNum=10, prog=6, quiet=False)
 
-	dealer.run()
+	#dealer.run()
 	print('\nRegion 1')
 	region1.run()
 
