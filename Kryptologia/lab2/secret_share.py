@@ -76,9 +76,9 @@ class SecretShare:
 		if not quiet is None:
 			self.quiet = quiet
 		out = None
-		if not self.quiet:
-			print(f"Sekret:\n{self.concatenateBytes(self.secret)}")
-			print(f"Sekret liczbowo: {self.M}")
+		if not self.quiet:			
+			print(f"\nSekret liczbowo: {self.M}")
+			#print(f"Sekret:\n{self.concatenateBytes(self.secret)}")
 
 		t0 = time.time()
 		self.createShares()
@@ -166,7 +166,8 @@ class Region:
 
 
 if __name__ == '__main__':
-	SECRET = get_random_bytes(3)
+	size = 10
+	SECRET = get_random_bytes(size)
 	dealer = SecretShare(secretInput=SECRET, shareNum=3, prog=3, quiet=True)
 	dealer.run()
 
@@ -176,9 +177,9 @@ if __name__ == '__main__':
 	print(f"Shadows for Regions: {S}")
 	
 	#s1 = str(S[0]).encode()	
-	s1 = (S[0]).to_bytes(10, byteorder='big')
-	s2 = (S[1]).to_bytes(10, byteorder='big')
-	s3 = (S[2]).to_bytes(10, byteorder='big')
+	s1 = (S[0]).to_bytes(size, byteorder='big')
+	s2 = (S[1]).to_bytes(size, byteorder='big')
+	s3 = (S[2]).to_bytes(size, byteorder='big')
 	#print(s1)
 	
 	region1 = SecretShare(secretInput=s1, shareNum=6, prog=3, quiet=False)
