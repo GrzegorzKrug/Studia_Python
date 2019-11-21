@@ -5,6 +5,30 @@ import random
 import sys
 import time
 
+
+def time_it(N):
+	def wrapper(some_fun):
+		def go(*args, **kwargs):
+			T  = []
+			n = N
+			if n < 0:
+				n = 1
+			for i in range(n):
+				t0 = time.time()
+				out = some_fun(*args, **kwargs)
+				t_end = time.time() - t0
+				t_end_ms = round(t_end * 1000, 6)
+				T += [t_end_ms]
+				
+				# if i== 0 or (i+1)%10 == 0:
+				# 	print(f"Loop {i+1} of {n}")
+				# 	print(f"Encoding and decoding time: {t_end_ms} ms")
+			print(f'Average time: {np.mean(T)} ms')
+			return out
+		return go
+	return wrapper
+
+
 class SecretShare:
 	def __init__(self, shareNum, prog, secretInput=None, quiet=True):
 		if not secretInput:
@@ -72,6 +96,7 @@ class SecretShare:
 			out += (sh['m'] * res)
 		return out % self.p
 
+	@time_it(30)
 	def run(self, quiet=None):
 		if not quiet is None:
 			self.quiet = quiet
@@ -80,24 +105,21 @@ class SecretShare:
 			print(f"\nSekret liczbowo: {self.M}")
 			#print(f"Sekret:\n{self.concatenateBytes(self.secret)}")
 
-		t0 = time.time()
 		self.createShares()
 		if not self.quiet:
 			for i, s in enumerate(self.shares):
 				print(f"Share {i+1} = {s}")
 
 		out = self.reconstruct(self.shares)
-		t_end = time.time() - t0
-		print(f"Encoding and decoding time: {t_end}")
-
-		if out == self.M:			
-			print(f"Secret is the same:\n{out}")			
-		else:
-			print("Secret is not the same!")
-			try:
-				print(f"{self.concatenateBytes(out)}")
-			except TypeError:
-				print(f"{out}")				
+		if not self.quiet:
+			if out == self.M:			
+				print(f"Secret is the same:\n{out}")			
+			else:
+				print("Secret is not the same!")
+				try:
+					print(f"{self.concatenateBytes(out)}")
+				except TypeError:
+					print(f"{out}")				
 
 	def translateByteToText(self, textin):
 		return ''.join([chr(o) for o in textin])
@@ -107,6 +129,9 @@ class SecretShare:
 		for bt in bts:
 			out += str(bt).encode()
 		return out
+
+
+
 
 
 class Polynomial:
@@ -128,7 +153,7 @@ class Polynomial:
 		return y, f'f({x}) = {y}'
 
 
-# Wikipedia
+# Implementacja z Wikipedii
 # https://en.wikibooks.org/wiki/Algorithm_Implementation/Mathematics/Extended_Euclidean_algorithm#Modular_inverse
 class ModularInverse:	
 	@classmethod
@@ -160,40 +185,48 @@ class ModularInverse:
 			raise ValueError("Not found modular inversion!")
 
 
-class Region:
-	def __init__(self, senatorsNum=1):
-		self.senators = []
+# class Region:
+# 	def __init__(self, senatorsNum=1):
+# 		self.senators = []
 
 
 if __name__ == '__main__':
-	size = 10
+	size = 30
 	SECRET = get_random_bytes(size)
+	QUIET = True
+
 	dealer = SecretShare(secretInput=SECRET, shareNum=3, prog=3, quiet=True)
+	print('\nPodzial Sekretu')		
+	print(f"Sekret: {int.from_bytes(SECRET, byteorder='big')}")
 	dealer.run()
 
-	S = dealer.createShares()
-
-	print(f"Main Secret:\n{SECRET}")
-	print(f"Shadows for Regions: {S}")
-	
-	#s1 = str(S[0]).encode()	
+	S = dealer.createShares()	
+	## s1 = str(S[0]).encode()  # konwersja cyfr
 	s1 = (S[0]).to_bytes(size, byteorder='big')
 	s2 = (S[1]).to_bytes(size, byteorder='big')
 	s3 = (S[2]).to_bytes(size, byteorder='big')
-	#print(s1)
-	
-	region1 = SecretShare(secretInput=s1, shareNum=6, prog=3, quiet=False)
-	region2 = SecretShare(secretInput=s2, shareNum=4, prog=3, quiet=False)
-	region3 = SecretShare(secretInput=s3, shareNum=10, prog=6, quiet=False)
 
-	#dealer.run()
+	# Same Secret Time Checking
+	# s1 = SECRET
+	# s2 = s1
+	# s3 = s1
+	# S = [s1, s1, s1]
+	
+	region1 = SecretShare(secretInput=s1, shareNum=6, prog=3, quiet=QUIET)
+	region2 = SecretShare(secretInput=s2, shareNum=4, prog=3, quiet=QUIET)
+	region3 = SecretShare(secretInput=s3, shareNum=10, prog=6, quiet=QUIET)
+
+	
 	print('\nRegion 1')
+	print(f"Sekret: {S[0]}")
 	region1.run()
 
 	print('\nRegion 2')
+	print(f"Sekret: {S[1]}")
 	region2.run()
 
 	print('\nRegion 3')
+	print(f"Sekret: {S[2]}")
 	region3.run()
 	
 	#app = SecretShare(secretInput=get_random_bytes(5), shareNum=15, prog=10, quiet=False)
