@@ -18,12 +18,11 @@ def time_it(N):
 				out = some_fun(*args, **kwargs)
 				t_end = time.time() - t0
 				t_end_ms = round(t_end * 1000, 6)
-				T += [t_end_ms]
-				
+				T += [t_end_ms]				
 				# if i== 0 or (i+1)%10 == 0:
 				# 	print(f"Loop {i+1} of {n}")
 				# 	print(f"Encoding and decoding time: {t_end_ms} ms")
-			print(f'Average time: {np.mean(T)} ms')
+			print(f'Average excecution time: {np.mean(T)} ms')
 			return np.mean(T)
 		return go
 	return wrapper
@@ -37,6 +36,7 @@ class SecretShare:
 			self.secret = [bt for bt in secretInput]
 		
 		self.complexity = len(self.secret)	# complexity in byte's num
+		#print(f" complexity = {self.complexity}")
 		#print(f"Complex: {self.complexity}")
 		self.shareNum = shareNum
 		self.prog = prog		
@@ -52,19 +52,18 @@ class SecretShare:
 
 	def createShares(self):		
 		n = self.shareNum				
-		self.p = nextprime(self.M)
-		# if not self.quiet:
-			# print(f"P = {self.p}")
+		self.p = nextprime(self.M)  # P tylko większe od M
+		#self.p = nextprime(2**(self.complexity*8))		
 		if (self.prog > self.shareNum):
-			raise ValueError(f"Cieni mniej niż prog potrzebny do odworzenia!")
+			raise ValueError(f"Cieni mniej niż prog potrzebny do odtworzenia!")
+		if self.p < self.M:
+			raise ValueError(f"P jest mniejsze od M {self.p} < {self.M}")
 
-		coeffs = [self.M]		
+		coeffs = [self.M]  # Wyraz wolny a0	
 		for i in range(self.prog - 1):
 			coeffs += [int.from_bytes(get_random_bytes(self.complexity),
 						byteorder='big')]
-		poly = Polynomial(coeffs)
-		# if not self.quiet:
-		# 	print(poly)		
+		poly = Polynomial(coeffs)	
 		self.shares = []
 
 		for i in range(n):
@@ -77,10 +76,9 @@ class SecretShare:
 		out = 0
 		shadows = [{'xi': i+1, 'm': sh} for i, sh in enumerate(shadows)]
 		
-		#print(f"shadows {shadows}")
 		random.shuffle(shadows)
 		shadows = shadows[:self.prog]
-		X = 0  # const
+		X = 0  # const, F(0) = M
 		for i, sh in enumerate(shadows):
 			res = 1
 			for j in range(len(shadows)):
@@ -96,19 +94,18 @@ class SecretShare:
 			out += (sh['m'] * res)
 		return out % self.p
 
-	@time_it(30)
+	@time_it(1)
 	def run(self, quiet=None):
 		if not quiet is None:
 			self.quiet = quiet
 		out = None
-		if not self.quiet:			
-			print(f"\nSekret liczbowo: {self.M}")
-			#print(f"Sekret:\n{self.concatenateBytes(self.secret)}")
+		# if not self.quiet:			
+		# 	print(f"\nSekret liczbowo:\n{self.M}")		
 
 		self.createShares()
 		if not self.quiet:
 			for i, s in enumerate(self.shares):
-				print(f"Share {i+1} = {s}")
+				print(f"\tShare {i+1} = {s}")
 
 		out = self.reconstruct(self.shares)
 		if not self.quiet:
@@ -119,7 +116,8 @@ class SecretShare:
 				try:
 					print(f"{self.concatenateBytes(out)}")
 				except TypeError:
-					print(f"{out}")				
+					print(f"{out}")		
+		return None		
 
 	def translateByteToText(self, textin):
 		return ''.join([chr(o) for o in textin])
@@ -131,10 +129,7 @@ class SecretShare:
 		return out
 
 
-
-
-
-class Polynomial:
+class Polynomial:  # Wielomian, liczenie wartosci w punktach x
 	def __init__(self, coeffs):
 		self.coeffs = coeffs
 		#print(f"New coeffs {self.coeffs}")
@@ -190,17 +185,15 @@ class ModularInverse:
 # 		self.senators = []
 
 
-if __name__ == '__main__':
-	size = 100
+if __name__ == '__main__':	
+	size = 10
 	SECRET = get_random_bytes(size)
-	QUIET = True
+	QUIET = False  # Wartość True dla pomiaru czasu
 
 	dealer = SecretShare(secretInput=SECRET, shareNum=3, prog=3, quiet=True)
 	print('\nPodzial Sekretu')		
-	print(f"Sekret: {int.from_bytes(SECRET, byteorder='big')}")
-	
+	print(f"Sekret: {int.from_bytes(SECRET, byteorder='big')}")	
 	T = [dealer.run()]  # Pomiar Czasu szyfracji dealera
-
 	
 	# s1 = str(S[0]).encode()  # konwersja cyfr w str na byte
 	S = dealer.createShares()  # Stworzenie udzialow
@@ -208,40 +201,36 @@ if __name__ == '__main__':
 	s2 = (S[1]).to_bytes(size, byteorder='big')
 	s3 = (S[2]).to_bytes(size, byteorder='big')
 
-	# Same Secret Time measure
-	# s1 = SECRET
-	# s2 = s1
-	# s3 = s1
-	# S = [s1, s1, s1]
-	
+	# Definiowanie regionów
 	region1 = SecretShare(secretInput=s1, shareNum=6, prog=3, quiet=QUIET)
 	region2 = SecretShare(secretInput=s2, shareNum=4, prog=3, quiet=QUIET)
 	region3 = SecretShare(secretInput=s3, shareNum=10, prog=6, quiet=QUIET)
 
 	# Pomiar czasu 
 	print('\nRegion 1')
-	print(f"Sekret: {S[0]}")
+	print(f"Sekret:\n{S[0]}")
 	T += [region1.run()]
 
 	# Pomiar czasu 
 	print('\nRegion 2')
-	print(f"Sekret: {S[1]}")
+	print(f"Sekret:\n{S[1]}")
 	T += [region2.run()]
 
 	# Pomiar czasu 
 	print('\nRegion 3')
-	print(f"Sekret: {S[2]}")
+	print(f"Sekret:\n{S[2]}")
 	T += [region3.run()]
 	
-	print(f"\nSum of times: {np.sum(T)}")
+	# Suma 
+	print(f"\nSum of times: {np.sum(T)} ms")
 
-	# Rekonstrukcja
+	# Rekonstrukcja 
 	m1 = region1.reconstruct(region1.shares)
 	m2 = region2.reconstruct(region2.shares)
 	m3 = region3.reconstruct(region3.shares)
-	
 	M = dealer.reconstruct([m1, m2, m3])	
-	print(f"Odzyskany sekret:\n{M}")  # Odszywrowana wiadomosc jest dziesietna
+
+	print(f"\nOdzyskany sekret z cieni regionów:\n{M}")  # Odszyfrowana wiadomosc jest dziesietna
 	if dealer.M == M:
 		print('Deszyfracja prawidlowa.')
 	else:
