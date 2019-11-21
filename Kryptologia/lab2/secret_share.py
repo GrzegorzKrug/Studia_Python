@@ -24,7 +24,7 @@ def time_it(N):
 				# 	print(f"Loop {i+1} of {n}")
 				# 	print(f"Encoding and decoding time: {t_end_ms} ms")
 			print(f'Average time: {np.mean(T)} ms')
-			return out
+			return np.mean(T)
 		return go
 	return wrapper
 
@@ -191,22 +191,24 @@ class ModularInverse:
 
 
 if __name__ == '__main__':
-	size = 30
+	size = 100
 	SECRET = get_random_bytes(size)
 	QUIET = True
 
 	dealer = SecretShare(secretInput=SECRET, shareNum=3, prog=3, quiet=True)
 	print('\nPodzial Sekretu')		
 	print(f"Sekret: {int.from_bytes(SECRET, byteorder='big')}")
-	dealer.run()
+	
+	T = [dealer.run()]  # Pomiar Czasu szyfracji dealera
 
-	S = dealer.createShares()	
-	## s1 = str(S[0]).encode()  # konwersja cyfr
+	
+	# s1 = str(S[0]).encode()  # konwersja cyfr w str na byte
+	S = dealer.createShares()  # Stworzenie udzialow
 	s1 = (S[0]).to_bytes(size, byteorder='big')
 	s2 = (S[1]).to_bytes(size, byteorder='big')
 	s3 = (S[2]).to_bytes(size, byteorder='big')
 
-	# Same Secret Time Checking
+	# Same Secret Time measure
 	# s1 = SECRET
 	# s2 = s1
 	# s3 = s1
@@ -216,19 +218,36 @@ if __name__ == '__main__':
 	region2 = SecretShare(secretInput=s2, shareNum=4, prog=3, quiet=QUIET)
 	region3 = SecretShare(secretInput=s3, shareNum=10, prog=6, quiet=QUIET)
 
-	
+	# Pomiar czasu 
 	print('\nRegion 1')
 	print(f"Sekret: {S[0]}")
-	region1.run()
+	T += [region1.run()]
 
+	# Pomiar czasu 
 	print('\nRegion 2')
 	print(f"Sekret: {S[1]}")
-	region2.run()
+	T += [region2.run()]
 
+	# Pomiar czasu 
 	print('\nRegion 3')
 	print(f"Sekret: {S[2]}")
-	region3.run()
+	T += [region3.run()]
 	
-	#app = SecretShare(secretInput=get_random_bytes(5), shareNum=15, prog=10, quiet=False)
-	#app.run()
+	print(f"\nSum of times: {np.sum(T)}")
+
+	# Rekonstrukcja
+	m1 = region1.reconstruct(region1.shares)
+	m2 = region2.reconstruct(region2.shares)
+	m3 = region3.reconstruct(region3.shares)
+	
+	M = dealer.reconstruct([m1, m2, m3])	
+	print(f"Odzyskany sekret:\n{M}")  # Odszywrowana wiadomosc jest dziesietna
+	if dealer.M == M:
+		print('Deszyfracja prawidlowa.')
+	else:
+		print('Deszyfracja nieudana.')
+	# Print w bytach
+	# print(f"W Byte:\n{M.to_bytes(size, byteorder='big')}")
+	# print(f" Sekret przed podzialem:\n{SECRET}")
+	
 	input('\nEnd....')
