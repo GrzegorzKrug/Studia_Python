@@ -9,8 +9,20 @@ class listArray:
 			array = [array]
 		
 		self.array = Matrix(array)
+		print("Starting", array)
+		# if type(array) == Zero:
+		# 	self.size = (0, 0)
+		# else:
 		self.size = (len(array), len(array[0]))
-		print(f"Initated: \n{self.__repr__}\nSize: {self.size}")
+		
+	def __getitem__(self, i):
+		if type(i) == slice:
+			pass
+		else:
+			slic1 = i[0]
+			slic2 = i[1]
+		print(f"Type {type(i)}")
+		return None
 
 	def __repr__(self):
 		#self.__name__
@@ -32,30 +44,11 @@ class listArray:
 
 
 	def __sub__(self, other):
-		return self.array - other.array
+		return listArray(self.array - other.array)
 
 	def __add__(self, other):
-		return self.array + other.array
+		return listArray(self.array + other.array)
 			
-# 			for col in row:
-# 				txt +=  f' {col}'
-# 			if i == len(self.elements)-1:
-# 				txt += ']'
-# 			else:
-# 				txt +=  f'],'
-# 		txt +=  f']'
-# 		return txt
-
-# 	def __len__(self):
-# 		return (len(self.elements) * len(self.elements[0]))
-
-
-# 	def __add__(self, other):
-# 		out = []
-
-# 		if self.size == other.size:
-# 			return True
-# 		return None
 
 
 a = [['a','b', 'c'],
@@ -64,16 +57,8 @@ a = [['a','b', 'c'],
 
 A = listArray(a)
 print(A)
+print(A[:,1:2])
 
-
-print(A - A)
-print(A + A)
-# for row in spA:
-	# print(row)
-print(Matrix(a)+Matrix(a))
-print(Matrix(a)-Matrix(a))
-# print(spA.det())
-#print(spA[3, 3])
-
-
+# print(A - A)
+# print(A + A)
 
