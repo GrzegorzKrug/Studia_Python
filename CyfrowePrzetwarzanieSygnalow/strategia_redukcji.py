@@ -36,7 +36,7 @@ class listArray:
             cstop = self.size[1]
             cstep = 1
 
-        # Double slice -> 
+        # Double slice ->
         elif type(i[0]) is slice and type(i[1]) is slice:
             rslice = i[0]
             cslice = i[1]
@@ -57,7 +57,7 @@ class listArray:
         ]
             for r in range(rstart, rstop, rstep)
         ]
-       
+
         return listArray(out)
 
     def __repr__(self):
@@ -70,7 +70,7 @@ class listArray:
                 txt += f'\n{"[":>2}'
 
             for col in range(self.size[1]):
-                txt += f' {self.array[self.size[1]*row +col]}'
+                txt += f' {self.array[self.size[1]*row +col]},'
 
             if row >= self.size[0] - 1:
                 txt += ']'
@@ -81,15 +81,25 @@ class listArray:
         return txt
 
     def __sub__(self, other):
-        return listArray(self.array - other.array)
+        return listArray([[
+            self.array[r * self.size[1] + c] - other.array[r * self.size[1] + c]
+            for c in range(self.size[1])
+        ]
+            for r in range(self.size[0])
+        ])
 
     def __add__(self, other):
-        return listArray(self.array + other.array)
+        return listArray([[
+            self.array[r * self.size[1] + c] + other.array[r * self.size[1] + c]
+            for c in range(self.size[1])
+        ]
+            for r in range(self.size[0])
+        ])
 
 
 a = [['a', 'b', 'c', 'g', 'h'],
      ['d', 'e', 'f', 'x', 'u'],
-     ['q', 't', 'i', 'a', 'h'],
+     ['q', 't', 'i', 'y', 'h'],
      ['i', 'o', 'p', 's', 'r']]
 
 b = [['d', 'e', 'f'], ['g', 'h', 'i']]
@@ -110,7 +120,9 @@ A2 = A[0:2, 0:3]
 A3 = A[2:4, 2:5]
 
 
-print(A2)
-print(A3)
+print(A2-A3)
 
-print(A2 + A3)
+# for el in A:
+#     print(el)
+
+print(A2+A3)
