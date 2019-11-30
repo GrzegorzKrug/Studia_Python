@@ -96,6 +96,9 @@ class listArray:
             for r in range(self.size[0])
         ])
 
+    def __mul__(self, other):
+        pass
+
 
 a = [['a', 'b', 'c', 'g', 'h'],
      ['d', 'e', 'f', 'x', 'u'],
@@ -112,17 +115,13 @@ C = listArray(c)
 D = listArray(d)
 
 print(f"A =\n{A}")
-# print(f"B =\n{B}")
-# print(f"C =\n{C}")
-# print(f"D =\n{D}")
-
-A2 = A[0:2, 0:3]
-A3 = A[2:4, 2:5]
 
 
-print(A2-A3)
 
-# for el in A:
-#     print(el)
+A = A[0:2, 0:2]
+# A3 = A[2:4, 2:5]
 
-print(A2+A3)
+t = Matrix(['a', 'b'])
+print(t*t.T)
+
+print(A * A)
