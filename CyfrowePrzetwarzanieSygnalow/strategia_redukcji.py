@@ -3,21 +3,26 @@ from copy import copy, deepcopy
 from sympy import Matrix, zeros, ones, eye, diag
 from itertools import permutations
 
+
 class ListArray:
     def __init__(self, array):
-        # if array is None or array == []:
-        #     pass
         if type(array) == int:
-            array = [[array]]
-        elif type(array[0]) != list:
             array = [array]
 
-        self.array = Matrix(array)                    
-        self.size = (len(array), len(array[0]))
+        if type(array[0]) != list:
+            self.single = True
+            self.size = (1, len(array))
+            array = [array]  # Matrix always uses 2d !
+            
+        else:
+            self.single = False
+            self.size = (len(array), len(array[0]))
+
+        self.array = Matrix(array)        
+        self.history = [{'created': array}]
 
     def __getitem__(self, i):
-        # if type(i) is int:
-        # 1 Slice Extracting rows!
+        # Condition to extract row!
         if type(i) is slice:
             rstart = i.start if i.start else 0
             rstop = i.stop if i.stop else self.size[0]
@@ -27,7 +32,7 @@ class ListArray:
             cstop = self.size[1]
             cstep = 1
 
-        # Slice with number -> one Row
+        # Condition to Slice with number -> one Row
         elif type(i) is int:
             rstart = i
             rstop = i + 1
@@ -37,7 +42,7 @@ class ListArray:
             cstop = self.size[1]
             cstep = 1
 
-        # Double slice ->
+        # Condition Double slice
         elif type(i[0]) is slice and type(i[1]) is slice:
             rslice = i[0]
             cslice = i[1]
@@ -50,14 +55,27 @@ class ListArray:
             cstop = cslice.stop if cslice.stop else self.size[1]
             cstep = cslice.step if cslice.step else 1
         else:
-            raise ValueError("Incorrect Slice with list Array")
+            raise ValueError(f"Incorrect Slice params: {i}")
 
-        out = [[
-            self.array[r * self.size[1] + c]
-            for c in range(cstart, cstop, cstep)
-        ]
-            for r in range(rstart, rstop, rstep)
-        ]
+        array = self.array
+        if self.single: 
+            # array = array]
+            out = [
+                array[r * self.size[1] + c]
+                for c in range(cstart, cstop, cstep)
+            
+                for r in range(rstart, rstop, rstep)
+            ]
+        else:
+            out = [[
+                array[r * self.size[1] + c]
+                for c in range(cstart, cstop, cstep)
+            ]
+                for r in range(rstart, rstop, rstep)
+            ]
+
+        # if self.single:  # Returning row, instead of [[1 row]]
+        #     out = out[0]
 
         return ListArray(out)
 
@@ -83,7 +101,8 @@ class ListArray:
 
     def __sub__(self, other):
         return ListArray([[
-            self.array[r * self.size[1] + c] - other.array[r * self.size[1] + c]
+            self.array[r * self.size[1] + c] -
+            other.array[r * self.size[1] + c]
             for c in range(self.size[1])
         ]
             for r in range(self.size[0])
@@ -91,45 +110,72 @@ class ListArray:
 
     def __add__(self, other):
         return ListArray([[
-            self.array[r * self.size[1] + c] + other.array[r * self.size[1] + c]
+            self.array[r * self.size[1] + c] +
+            other.array[r * self.size[1] + c]
             for c in range(self.size[1])
         ]
             for r in range(self.size[0])
         ])
 
     def __mul__(self, other):
-        pass
-        # return ['mnożenie' for row in 
+        return [row
+                for row in self
+                # for col in other.transp()
+                # for r, c in zip(row, col)
+                ]
 
     def __eq__(self, other):
-        return self.array == other.array
+        # print('self arr: \t', self.array)
+        # print('other arr: \t', other.array)
+        # if self.single:
+        #     array = [self.array]
+        # else:
+        array = self.array
+
+        # if other.single:
+        #     array2 = [other.array]
+        # else:
+        array2 = other.array   
+        # print('Self2:  \t', array)
+        # print('Other2: \t', array2)
+        return array == array2
+
+    def switch_Rows(self):
+        print("Finish this")
+
+    def switch_cols(self):
+        print("Finish this")
 
     def transp(self):
-        return ListArray(self.array.T)
-        
+        c = self.size[0]
+        r = self.size[1]
+        array_t = self.array.T
+        return ListArray([array_t[row*c:row*c + c] for row in range(r)])
+
     def fit(self):
+        # A | B
+        # --|--
+        # C | D
         if self.size[0] % 2 == 1 or self.size[1] % 2 == 1:
             raise ValueError("Matrix has to be even size!")
 
-        # A | B
-        # --|--
-        # C | D 
-        half_rows = int(self.size[0]/2)  
-        half_cols = int(self.size[1]/2)  
+        half_rows = int(self.size[0]/2)
+        half_cols = int(self.size[1]/2)
 
         square_a = self[0:half_rows, 0:half_cols]
         square_b = self[0:half_rows, half_cols:self.size[1]]
         square_c = self[half_rows:self.size[0], 0:half_cols]
         square_d = self[half_rows:self.size[0], half_cols:self.size[1]]
-        print("Matrix:\n", self)
-        print('square a:\n', square_a)
-        print('square b:\n', square_b)
-        print('square c:\n', square_c)
-        print('square d:\n', square_d)
-        a = copy(square_a)
-        square_b.size=(3,3)
-        print("A == A:", square_a == square_a)
-        print("A == B:", square_a == square_b)
+
+        return any([
+            square_a == square_b,
+            square_a == square_c,
+            square_a == square_d,
+            square_b == square_c,
+            square_b == square_d,
+            square_c == square_d
+        ])
+
 
 if __name__ == "__main__":
     a = [['a', 'b', 'c', 'g'],
@@ -139,23 +185,12 @@ if __name__ == "__main__":
 
     b = [['d', 'e', 'f'], ['g', 'h', 'i']]
     c = ['x', 'y', 'z']
-    d = [['i', 'b', 'cd']]
+    d = [['i', 'b', 'c', 'd']]
 
     A = ListArray(a)
     B = ListArray(b)
     C = ListArray(c)
     D = ListArray(d)
-
-    # print(f"A =\n{A}")
-
-
-
-    # A = A[0:2, 0:2]
-    # A3 = A[2:4, 2:5]
-
-    t = Matrix(['a', 'b'])
-    # print(t*t.T)
-
-    print(A.fit())
-
-
+    print(A[0])
+    print(C[0])
+    print(D[0])
