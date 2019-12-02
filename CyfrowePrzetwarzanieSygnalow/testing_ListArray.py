@@ -33,11 +33,6 @@ class TestinglistArray(unittest.TestCase):
         assert A[2] == ListArray([['q', 't', 'i', 'y']])
         assert A[2] == ListArray(['q', 't', 'i', 'y'])
 
-    def test_row_len(self):        
-        A = ListArray(self.a)
-        for a in A:
-          print('a', a.transp())
-
     def test_fit(self):
         a = \
             [['a', 'b', 'a', 'b'],
@@ -81,14 +76,25 @@ class TestinglistArray(unittest.TestCase):
              ['b', 'x']]
 
         b = [['b', 'b'],
-             ['b', 'b']]
+             ['d', 'b']]
+        res1 = [['a*a + b*g', 'a*g + x*g'],
+                ['b*a + x*b', 'g*b + x*x']]
+        res2 = [['a*b + d*g', 'a*b + b*g'],
+                ['b*b + d*x', 'b*b + x*b']]
 
         A = ListArray(a)
         B = ListArray(b)
-        print(A*A)
+        Res1 = ListArray(res1)
+        Res2 = ListArray(res2)
 
-        # for row in A:
-        # print(row)
+        assert(A*A == Res1)
+        assert(A*B == Res2)
+
+    # def test_row_len(self):
+    #     A = ListArray(self.a)
+    #     for a in A:
+    #         # pass
+    #         print('a', a == ListArray(['d','e','f','x']))
 
 
 if __name__ == '__main__':

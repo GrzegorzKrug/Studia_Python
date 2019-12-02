@@ -13,12 +13,16 @@ class ListArray:
             self.single = True
             self.size = (1, len(array))
             array = [array]  # Matrix always uses 2d !
-            
         else:
             self.single = False
             self.size = (len(array), len(array[0]))
 
-        self.array = Matrix(array)        
+        for row in array:
+            if type(row[0]) == list:
+                print('To deep Array:', array)
+                break
+
+        self.array = Matrix(array)
         self.history = [{'created': array}]
 
     def __getitem__(self, i):
@@ -58,12 +62,12 @@ class ListArray:
             raise ValueError(f"Incorrect Slice params: {i}")
 
         array = self.array
-        if self.single: 
+        if self.single:
             # array = array]
             out = [
                 array[r * self.size[1] + c]
                 for c in range(cstart, cstop, cstep)
-            
+
                 for r in range(rstart, rstop, rstep)
             ]
         else:
@@ -74,13 +78,9 @@ class ListArray:
                 for r in range(rstart, rstop, rstep)
             ]
 
-        # if self.single:  # Returning row, instead of [[1 row]]
-        #     out = out[0]
-
         return ListArray(out)
 
     def __repr__(self):
-        # self.__name__
         txt = '['
         for row in range(self.size[0]):
             if row == 0:
@@ -96,7 +96,6 @@ class ListArray:
             else:
                 txt += f'],'
         txt += f']'
-        # return str(self.array)
         return txt
 
     def __sub__(self, other):
@@ -118,27 +117,14 @@ class ListArray:
         ])
 
     def __mul__(self, other):
-        return [row
-                for row in self
-                # for col in other.transp()
-                # for r, c in zip(row, col)
-                ]
+        result = self.array * other.array
+        result = [result[other.size[1]*row: other.size[1]*row + other.size[1]]
+                  for row in range(self.size[0])
+                  ]
+        return ListArray(result)
 
     def __eq__(self, other):
-        # print('self arr: \t', self.array)
-        # print('other arr: \t', other.array)
-        # if self.single:
-        #     array = [self.array]
-        # else:
-        array = self.array
-
-        # if other.single:
-        #     array2 = [other.array]
-        # else:
-        array2 = other.array   
-        # print('Self2:  \t', array)
-        # print('Other2: \t', array2)
-        return array == array2
+        return self.array == other.array
 
     def switch_Rows(self):
         print("Finish this")
