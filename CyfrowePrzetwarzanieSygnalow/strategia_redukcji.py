@@ -138,7 +138,7 @@ class ListArray:
         array_t = self.array.T
         return ListArray([array_t[row*c:row*c + c] for row in range(r)])
 
-    def fit(self):
+    def fit_any(self):
         # A | B
         # --|--
         # C | D

@@ -46,9 +46,9 @@ class TestinglistArray(unittest.TestCase):
         B = ListArray(b)
         C = ListArray(c)
 
-        assert A.fit()
-        assert not B.fit()
-        self.assertRaises(ValueError, C.fit)
+        assert A.fit_any()
+        assert not B.fit_any()
+        self.assertRaises(ValueError, C.fit_any)
 
     def test_traspose(self):
         a = [['a', 'g'],
