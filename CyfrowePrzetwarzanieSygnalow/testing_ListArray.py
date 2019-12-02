@@ -1,4 +1,4 @@
-from strategia_redukcji import ListArray
+from reduction_strategy import ListArray
 import unittest
 
 
@@ -17,7 +17,6 @@ class TestinglistArray(unittest.TestCase):
              ['i', 'o', 'p', 's']]
 
     def test_equal(self):
-
         A = ListArray(self.a)
         B = ListArray(self.b)
         Aprim = ListArray(self.a)
@@ -28,8 +27,6 @@ class TestinglistArray(unittest.TestCase):
         assert not A == B
         assert cut_A == cut_B
 
-        # print("A2 \n\t", A[2])
-        # print("List \n\t", ListArray(['q', 't', 'i', 'y']))
         assert A[2] == ListArray([['q', 't', 'i', 'y']])
         assert A[2] == ListArray(['q', 't', 'i', 'y'])
 
@@ -70,6 +67,38 @@ class TestinglistArray(unittest.TestCase):
         B2 = ListArray(b2)
         assert A.transp() == B
         assert A2.transp() == B2
+    def test_add(self):
+        a = [['a', 'g'],
+             ['b', 'x']]
+
+        b = [['b', 'b'],
+             ['d', 'b']]
+        res1 = [['a+b','g+b'],['b+d','b+x']]
+        res2 = [['b+b','b+b'],['d+d','b+b']]
+        A = ListArray(a)
+        B = ListArray(b)
+        res1 = ListArray(res1)
+        res2 = ListArray(res2)
+
+        assert A + B == res1
+        assert B + B == res2
+
+    def test_sub(self):
+        a = [['a', 'g'],
+             ['b', 'x']]
+
+        b = [['b', 'b'],
+             ['d', 'b']]
+        res1 = [['a-b','g-b'],['b-d','x-b']]
+        res2 = [['b-b','b-b'],['d-d','b-b']]
+
+        A = ListArray(a)
+        B = ListArray(b)
+        res1 = ListArray(res1)
+        res2 = ListArray(res2)
+
+        assert A - B == res1
+        assert B - B == res2
 
     def test_mult(self):
         a = [['a', 'g'],
@@ -90,11 +119,12 @@ class TestinglistArray(unittest.TestCase):
         assert(A*A == Res1)
         assert(A*B == Res2)
 
-    # def test_row_len(self):
-    #     A = ListArray(self.a)
-    #     for a in A:
-    #         # pass
-    #         print('a', a == ListArray(['d','e','f','x']))
+    def test_arra_length(self):
+        A = ListArray(self.a)
+        assert A.size[0] == len(A)
+        assert A.size[0] == 4
+        assert A.size[1] == len(A[0])
+        assert A.size[1] == 4
 
 
 if __name__ == '__main__':

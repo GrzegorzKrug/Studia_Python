@@ -6,6 +6,7 @@ from itertools import permutations
 
 class ListArray:
     def __init__(self, array):
+        # self.__class__ = 'ListArray'
         if type(array) == int:
             array = [array]
 
@@ -17,6 +18,9 @@ class ListArray:
             self.single = False
             self.size = (len(array), len(array[0]))
 
+        if len(array) == 1:
+            self.single = True
+
         for row in array:
             if type(row[0]) == list:
                 print('To deep Array:', array)
@@ -24,6 +28,18 @@ class ListArray:
 
         self.array = Matrix(array)
         self.history = [{'created': array}]
+
+    def __add__(self, other):
+        return ListArray([[
+            self.array[r * self.size[1] + c] +
+            other.array[r * self.size[1] + c]
+            for c in range(self.size[1])
+        ]
+            for r in range(self.size[0])
+        ])
+
+    def __eq__(self, other):
+        return self.array == other.array
 
     def __getitem__(self, i):
         # Condition to extract row!
@@ -54,7 +70,6 @@ class ListArray:
             rstart = rslice.start if rslice.start else 0
             rstop = rslice.stop if rslice.stop else self.size[0]
             rstep = rslice.step if rslice.step else 1
-
             cstart = cslice.start if cslice.start else 0
             cstop = cslice.stop if cslice.stop else self.size[1]
             cstep = cslice.step if cslice.step else 1
@@ -67,7 +82,6 @@ class ListArray:
             out = [
                 array[r * self.size[1] + c]
                 for c in range(cstart, cstop, cstep)
-
                 for r in range(rstart, rstop, rstep)
             ]
         else:
@@ -107,14 +121,14 @@ class ListArray:
             for r in range(self.size[0])
         ])
 
-    def __add__(self, other):
-        return ListArray([[
-            self.array[r * self.size[1] + c] +
-            other.array[r * self.size[1] + c]
-            for c in range(self.size[1])
-        ]
-            for r in range(self.size[0])
-        ])
+    # def __class__(self):
+    #     pass
+
+    def __len__(self):
+        # print(len(self.array))
+        if self.single:
+            return self.size[1]
+        return self.size[0]
 
     def __mul__(self, other):
         result = self.array * other.array
@@ -122,9 +136,6 @@ class ListArray:
                   for row in range(self.size[0])
                   ]
         return ListArray(result)
-
-    def __eq__(self, other):
-        return self.array == other.array
 
     def switch_Rows(self):
         print("Finish this")
@@ -163,6 +174,19 @@ class ListArray:
         ])
 
 
+class Reduktor(ListArray):
+    def __init__(self, matrix_input):
+        ListArray.__init__(self, array=matrix_input)
+
+        assert (self.size[0] == self.size[0] and self.size[0] % 2 == 0)
+
+        print("R:", len(matrix_input))
+        print("C:", len(matrix_input[0]))
+        self.matrix = matrix_input
+
+    def col_order(self):
+        pass
+
 if __name__ == "__main__":
     a = [['a', 'b', 'c', 'g'],
          ['d', 'e', 'f', 'x'],
@@ -174,9 +198,5 @@ if __name__ == "__main__":
     d = [['i', 'b', 'c', 'd']]
 
     A = ListArray(a)
-    B = ListArray(b)
-    C = ListArray(c)
-    D = ListArray(d)
-    print(A[0])
-    print(C[0])
-    print(D[0])
+    print(type(A))
+    red = Reduktor(a)
