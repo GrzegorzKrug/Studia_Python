@@ -4,9 +4,11 @@ from sympy import Matrix, zeros, ones, eye, diag
 from itertools import permutations
 
 
-class ListArray:
+class SymArray:
+    # Class is defining symbolic Array using Matrix object,
+    # Makes easy use of 2D elements
     def __init__(self, array):
-        # self.__class__ = 'ListArray'
+        # self.__class__ = 'SymArray'
         if type(array) == int:
             array = [array]
 
@@ -30,7 +32,7 @@ class ListArray:
         self.history = [{'created': array}]
 
     def __add__(self, other):
-        return ListArray([[
+        return SymArray([[
             self.array[r * self.size[1] + c] +
             other.array[r * self.size[1] + c]
             for c in range(self.size[1])
@@ -92,7 +94,7 @@ class ListArray:
                 for r in range(rstart, rstop, rstep)
             ]
 
-        return ListArray(out)
+        return SymArray(out)
 
     def __repr__(self):
         txt = '['
@@ -113,7 +115,7 @@ class ListArray:
         return txt
 
     def __sub__(self, other):
-        return ListArray([[
+        return SymArray([[
             self.array[r * self.size[1] + c] -
             other.array[r * self.size[1] + c]
             for c in range(self.size[1])
@@ -135,10 +137,12 @@ class ListArray:
         result = [result[other.size[1]*row: other.size[1]*row + other.size[1]]
                   for row in range(self.size[0])
                   ]
-        return ListArray(result)
+        return SymArray(result)
 
     def switch_Rows(self):
-        print("Finish this")
+        pass
+        new_Array =[]
+        return new_Array
 
     def switch_cols(self):
         print("Finish this")
@@ -147,7 +151,7 @@ class ListArray:
         c = self.size[0]
         r = self.size[1]
         array_t = self.array.T
-        return ListArray([array_t[row*c:row*c + c] for row in range(r)])
+        return SymArray([array_t[row*c:row*c + c] for row in range(r)])
 
     def match_patern_any(self):
         # A | B
@@ -174,9 +178,9 @@ class ListArray:
         ])
 
 
-class Reduktor(ListArray):
+class Reduktor(SymArray):
     def __init__(self, matrix_input):
-        ListArray.__init__(self, array=matrix_input)
+        SymArray.__init__(self, array=matrix_input)
 
         assert (self.size[0] == self.size[0] and self.size[0] % 2 == 0)
 
@@ -197,6 +201,6 @@ if __name__ == "__main__":
     c = ['x', 'y', 'z']
     d = [['i', 'b', 'c', 'd']]
 
-    A = ListArray(a)
+    A = SymArray(a)
     print(type(A))
     red = Reduktor(a)
