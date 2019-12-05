@@ -8,7 +8,7 @@ import warnings
 class SymArray:
     # Class is defining symbolic Array using Matrix object,
     # Makes easy use of 2D elements
-    def __init__(self, array):
+    def __init__(self, array, history=None):
         if type(array) == int:  # Number input
             array = [array]
 
@@ -33,7 +33,12 @@ class SymArray:
                               RuntimeWarning)
 
         self.array = Matrix(array)
-        self.history = [{'created': array}]
+
+        if history:
+            self.history = history
+        else:
+            self.history = []
+        self.history.append({'created': array})
 
     def __add__(self, other):
         return SymArray([[
@@ -146,8 +151,10 @@ class SymArray:
         col_len = self.size[1]
         new_Array = [self.array[col_len*ind: col_len*ind + col_len]
                      for ind in index_list
-                     ]        
-        return SymArray(new_Array)
+                     ]
+        new_Array = SymArray(new_Array, history=[{'Row Switch': index_list}])
+        new_Array.history = self.history + new_Array.history
+        return new_Array
 
     def switch_cols(self, index_list: 'List[int]'):
         if len(index_list) != self.size[1]:
@@ -155,10 +162,12 @@ class SymArray:
 
         col_len = self.size[1]
         new_Array = [[self.array[col_len * row + col_ind]
-                     for col_ind in index_list]
+                      for col_ind in index_list]
                      for row in range(self.size[0])
-                     ]        
-        return SymArray(new_Array)
+                     ]
+        new_Array = SymArray(new_Array, history=[{'Col Switch': index_list}])
+        new_Array.history = self.history + new_Array.history
+        return new_Array
 
     def transp(self):
         c = self.size[0]

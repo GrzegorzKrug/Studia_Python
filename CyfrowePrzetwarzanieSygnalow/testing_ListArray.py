@@ -168,7 +168,7 @@ class TestingSymArray(unittest.TestCase):
 
     def test_1d_rows_cols_swtich(self):
         pass
-        
+
     def test_rowcols_change(self):
         ar0 = [['a', 'b', 'c'],
                ['a', 'd', 'g'],
@@ -190,6 +190,9 @@ class TestingSymArray(unittest.TestCase):
         new_array_b = array0.switch_rows([2, 1, 0])
         new_array_b = new_array_b.switch_cols([1, 0, 2])
         self.assertEqual(new_array_b, SymArray(ar1_b))
+
+        # for message in new_array_b.history:
+        # print('\n', message)
 
 
 if __name__ == '__main__':
