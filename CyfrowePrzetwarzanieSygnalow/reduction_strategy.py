@@ -175,7 +175,7 @@ class SymArray:
         array_t = self.array.T
         return SymArray([array_t[row*c: row*c + c] for row in range(r)])
 
-    def match_patern_any(self):
+    def match_any_patern(self):
         # A | B
         # --|--
         # C | D
@@ -200,30 +200,32 @@ class SymArray:
         ])
 
 
-class Reduktor(SymArray):
+class Reduktor():
     def __init__(self, matrix_input):
-        SymArray.__init__(self, array=matrix_input)
+        self.array_ojb = SymArray(matrix_input)
 
-        assert (self.size[0] == self.size[0] and self.size[0] % 2 == 0)
+    def run(self):
+        for i, row_perm in enumerate(permutations(range(8))):
+            new_Array = self.array_ojb.switch_rows(row_perm)
+            if i % 1000 == 0:
+                print(i)
+            for j, col_perm in enumerate(permutations(range(8))):
+                test_array = new_Array.switch_cols(col_perm)
 
-        print("R:", len(matrix_input))
-        print("C:", len(matrix_input[0]))
-        self.matrix = matrix_input
-
-    def col_order(self):
-        pass
+                if test_array.match_any_patern():
+                    print(f"\nFound one\n{test_array}")
+                    print(test_array.history)
 
 
 if __name__ == "__main__":
-    a = [['a', 'b', 'c', 'g'],
-         ['d', 'e', 'f', 'x'],
-         ['q', 't', 'i', 'y'],
-         ['i', 'o', 'p', 's']]
+    a = [['a', '-b', '-c', '-d', '-e', '-f', '-g', '-h'],
+         ['b', 'a', 'd', '-c', 'f', '-e', '-h', 'g'],
+         ['c', '-d', 'a', 'b', 'g', 'h', '-e', '-f'],
+         ['d', 'c', '-b', 'a', 'h', '-g', 'f', '-e'],
+         ['e', '-f', '-g', '-h', 'a', 'b', 'c', 'd'],
+         ['f', 'e', '-h', 'g', '-b', 'a', '-d', 'c'],
+         ['g', 'h', 'e', '-f', '-c', 'd', 'a', '-b'],
+         ['h', '-g', 'f', 'e', '-d', '-c', 'b', 'a']]
 
-    b = [['d', 'e', 'f'], ['g', 'h', 'i']]
-    c = ['x', 'y', 'z']
-    d = [['i', 'b', 'c', 'd']]
-
-    A = SymArray(a)
-    print(type(A))
     red = Reduktor(a)
+    red.run()
