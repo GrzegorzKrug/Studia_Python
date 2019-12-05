@@ -23,12 +23,12 @@ class TestinglistArray(unittest.TestCase):
         cut_A = A[2:, 0:2]
         cut_B = B[2:, 0:2]
 
-        assert A == Aprim
-        assert not A == B
-        assert cut_A == cut_B
+        self.assertEqual(A, Aprim)
+        self.assertFalse(A == B)
+        self.assertEqual(cut_A, cut_B)
 
-        assert A[2] == ListArray([['q', 't', 'i', 'y']])
-        assert A[2] == ListArray(['q', 't', 'i', 'y'])
+        self.assertTrue(A[2] == ListArray([['q', 't', 'i', 'y']]))
+        self.assertTrue(A[2] == ListArray(['q', 't', 'i', 'y']))
 
     def test_fit(self):
         a = \
@@ -43,8 +43,8 @@ class TestinglistArray(unittest.TestCase):
         B = ListArray(b)
         C = ListArray(c)
 
-        assert A.match_patern_any()
-        assert not B.match_patern_any()
+        self.assertTrue(A.match_patern_any())
+        self.assertFalse(B.match_patern_any())
         self.assertRaises(ValueError, C.match_patern_any)
 
     def test_traspose(self):
@@ -65,23 +65,24 @@ class TestinglistArray(unittest.TestCase):
 
         A2 = ListArray(a2)
         B2 = ListArray(b2)
-        assert A.transp() == B
-        assert A2.transp() == B2
+        self.assertEqual(A.transp(), B)
+        self.assertEqual(A2.transp(), B2)
+
     def test_add(self):
         a = [['a', 'g'],
              ['b', 'x']]
 
         b = [['b', 'b'],
              ['d', 'b']]
-        res1 = [['a+b','g+b'],['b+d','b+x']]
-        res2 = [['b+b','b+b'],['d+d','b+b']]
+        res1 = [['a+b', 'g+b'], ['b+d', 'b+x']]
+        res2 = [['b+b', 'b+b'], ['d+d', 'b+b']]
         A = ListArray(a)
         B = ListArray(b)
         res1 = ListArray(res1)
         res2 = ListArray(res2)
 
-        assert A + B == res1
-        assert B + B == res2
+        self.assertEqual(A + B, res1)
+        self.assertEqual(B + B, res2)
 
     def test_sub(self):
         a = [['a', 'g'],
@@ -89,16 +90,16 @@ class TestinglistArray(unittest.TestCase):
 
         b = [['b', 'b'],
              ['d', 'b']]
-        res1 = [['a-b','g-b'],['b-d','x-b']]
-        res2 = [['b-b','b-b'],['d-d','b-b']]
+        res1 = [['a-b', 'g-b'], ['b-d', 'x-b']]
+        res2 = [['b-b', 'b-b'], ['d-d', 'b-b']]
 
         A = ListArray(a)
         B = ListArray(b)
         res1 = ListArray(res1)
         res2 = ListArray(res2)
 
-        assert A - B == res1
-        assert B - B == res2
+        self.assertEqual(A - B, res1)
+        self.assertEqual(B - B, res2)
 
     def test_mult(self):
         a = [['a', 'g'],
@@ -116,15 +117,15 @@ class TestinglistArray(unittest.TestCase):
         Res1 = ListArray(res1)
         Res2 = ListArray(res2)
 
-        assert(A*A == Res1)
-        assert(A*B == Res2)
+        self.assertEqual(A*A, Res1)
+        self.assertEqual(A*B, Res2)
 
     def test_arra_length(self):
         A = ListArray(self.a)
-        assert A.size[0] == len(A)
-        assert A.size[0] == 4
-        assert A.size[1] == len(A[0])
-        assert A.size[1] == 4
+        self.assertEqual(A.size[0], len(A))
+        self.assertEqual(A.size[0], 4)
+        self.assertEqual(A.size[1], len(A[0]))
+        self.assertEqual(A.size[1], 4)
 
 
 if __name__ == '__main__':
