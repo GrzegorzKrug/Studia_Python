@@ -50,6 +50,7 @@ class TestinglistArray(unittest.TestCase):
     def test_traspose(self):
         a = [['a', 'g'],
              ['b', 'x']]
+
         b = [['a', 'b'],
              ['g', 'x']]
 
@@ -62,9 +63,9 @@ class TestinglistArray(unittest.TestCase):
 
         A = ListArray(a)
         B = ListArray(b)
-
         A2 = ListArray(a2)
         B2 = ListArray(b2)
+
         self.assertEqual(A.transp(), B)
         self.assertEqual(A2.transp(), B2)
 
