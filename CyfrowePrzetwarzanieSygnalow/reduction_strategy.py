@@ -2,17 +2,21 @@ import numpy as np
 from copy import copy, deepcopy
 from sympy import Matrix, zeros, ones, eye, diag
 from itertools import permutations
+import warnings
 
 
 class SymArray:
     # Class is defining symbolic Array using Matrix object,
     # Makes easy use of 2D elements
     def __init__(self, array):
-        # self.__class__ = 'SymArray'
-        if type(array) == int:
+        if type(array) == int:  # Number input
             array = [array]
 
-        if type(array[0]) != list:
+        if array == [] or array is None:
+            self.size = (0, 0)
+            warnings.warn('Symbolic Array is empty!', RuntimeWarning)
+
+        elif type(array[0]) != list:
             self.single = True
             self.size = (1, len(array))
             array = [array]  # Matrix always uses 2d !
@@ -25,8 +29,8 @@ class SymArray:
 
         for row in array:
             if type(row[0]) == list:
-                print('To deep Array:', array)
-                break
+                warnings.warn(f'Array dimension is too big! Must be: n <= 2',
+                              RuntimeWarning)
 
         self.array = Matrix(array)
         self.history = [{'created': array}]
@@ -123,12 +127,8 @@ class SymArray:
             for r in range(self.size[0])
         ])
 
-    # def __class__(self):
-    #     pass
-
     def __len__(self):
-        # print(len(self.array))
-        if self.single:
+        if self.single:  # Lenght of vector, only if initiated as vector!
             return self.size[1]
         return self.size[0]
 
@@ -139,19 +139,32 @@ class SymArray:
                   ]
         return SymArray(result)
 
-    def switch_Rows(self):
-        pass
-        new_Array =[]
-        return new_Array
+    def switch_rows(self, index_list: 'List[int]'):
+        if len(index_list) != self.size[0]:
+            raise IndexError('Switch rows requires equal amount of indexes!')
 
-    def switch_cols(self):
-        print("Finish this")
+        col_len = self.size[1]
+        new_Array = [self.array[col_len*ind: col_len*ind + col_len]
+                     for ind in index_list
+                     ]        
+        return SymArray(new_Array)
+
+    def switch_cols(self, index_list: 'List[int]'):
+        if len(index_list) != self.size[1]:
+            raise IndexError('Switch rows requires equal amount of indexes!')
+
+        col_len = self.size[1]
+        new_Array = [[self.array[col_len * row + col_ind]
+                     for col_ind in index_list]
+                     for row in range(self.size[0])
+                     ]        
+        return SymArray(new_Array)
 
     def transp(self):
         c = self.size[0]
         r = self.size[1]
         array_t = self.array.T
-        return SymArray([array_t[row*c:row*c + c] for row in range(r)])
+        return SymArray([array_t[row*c: row*c + c] for row in range(r)])
 
     def match_patern_any(self):
         # A | B
@@ -190,6 +203,7 @@ class Reduktor(SymArray):
 
     def col_order(self):
         pass
+
 
 if __name__ == "__main__":
     a = [['a', 'b', 'c', 'g'],
