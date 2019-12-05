@@ -153,8 +153,8 @@ class SymArray:
         new_Array = [self.array[col_len*ind: col_len*ind + col_len]
                      for ind in index_list
                      ]
-        new_Array = SymArray(new_Array, history=[{'Row Switch': index_list}])
-        new_Array.history = self.history + new_Array.history
+        new_Array = SymArray(new_Array)  # , history=[{'Row Switch': index_list}])
+        # new_Array.history = self.history + new_Array.history
         return new_Array
 
     def switch_cols(self, index_list: 'List[int]'):
@@ -166,8 +166,8 @@ class SymArray:
                       for col_ind in index_list]
                      for row in range(self.size[0])
                      ]
-        new_Array = SymArray(new_Array, history=[{'Col Switch': index_list}])
-        new_Array.history = self.history + new_Array.history
+        new_Array = SymArray(new_Array)  #, history=[{'Col Switch': index_list}])
+        # new_Array.history = self.history + new_Array.history
         return new_Array
 
     def transp(self):
@@ -211,12 +211,20 @@ class Reduktor():
             new_Array = self.array_ojb.switch_rows(row_perm)
             if i % 100 == 0:
                 print(i)
-            for j, col_perm in enumerate(permutations(range(8))):
+            # print(i)
+            # for j, col_perm in enumerate(permutations(range(8))):
+            for j in range(1000):
+                col_perm = np.random.permutation(8)
+                # print(j)
+                if j%2 == 0 or j%3 == 0:
+                    continue
                 test_array = new_Array.switch_cols(col_perm)
 
                 if test_array.match_any_patern():
                     print(f"\nFound one\n{test_array}")
-                    print(test_array.history)
+                    print(f"Rows: {row_perm}")
+                    print(f"Cols: {col_perm}")
+                    # print(test_array.history)
                     mid_time = time.time()
                     print(f"Time elapsed to this point: {(mid_time - time0)/60} min")
         end_time = time.time()
