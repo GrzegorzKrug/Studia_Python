@@ -3,6 +3,7 @@ from copy import copy, deepcopy
 from sympy import Matrix, zeros, ones, eye, diag
 from itertools import permutations
 import warnings
+import time
 
 
 class SymArray:
@@ -205,9 +206,10 @@ class Reduktor():
         self.array_ojb = SymArray(matrix_input)
 
     def run(self):
+        time0 = time.time()
         for i, row_perm in enumerate(permutations(range(8))):
             new_Array = self.array_ojb.switch_rows(row_perm)
-            if i % 1000 == 0:
+            if i % 100 == 0:
                 print(i)
             for j, col_perm in enumerate(permutations(range(8))):
                 test_array = new_Array.switch_cols(col_perm)
@@ -215,6 +217,10 @@ class Reduktor():
                 if test_array.match_any_patern():
                     print(f"\nFound one\n{test_array}")
                     print(test_array.history)
+                    mid_time = time.time()
+                    print(f"Time elapsed to this point: {(mid_time - time0)/60} min")
+        end_time = time.time()
+        print(f"Time elapsed: {(end_time - time0)/60} min")
 
 
 if __name__ == "__main__":
