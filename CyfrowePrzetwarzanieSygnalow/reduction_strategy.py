@@ -1,6 +1,7 @@
 import numpy as np
 from copy import copy, deepcopy
-from sympy import Matrix, zeros, ones, eye, diag
+from sympy import Matrix, zeros
+from sympy.functions import sign
 from itertools import permutations
 import warnings
 import time
@@ -85,6 +86,16 @@ class SymArray:
             cstart = cslice.start if cslice.start else 0
             cstop = cslice.stop if cslice.stop else self.size[1]
             cstep = cslice.step if cslice.step else 1
+
+        elif type(i) is tuple and len(i) == 2:
+            rstart = i[0]
+            rstop = i[0] + 1
+            rstep = 1
+            cstart = i[1]
+            cstop = i[1] + 1
+            cstep = 1
+            # return self.array[i[0] * self.size[1] + i[1]]
+
         else:
             raise ValueError(f"Incorrect Slice params: {i}")
 
@@ -153,7 +164,8 @@ class SymArray:
         new_Array = [self.array[col_len*ind: col_len*ind + col_len]
                      for ind in index_list
                      ]
-        new_Array = SymArray(new_Array)  # , history=[{'Row Switch': index_list}])
+        # , history=[{'Row Switch': index_list}])
+        new_Array = SymArray(new_Array)
         # new_Array.history = self.history + new_Array.history
         return new_Array
 
@@ -166,7 +178,8 @@ class SymArray:
                       for col_ind in index_list]
                      for row in range(self.size[0])
                      ]
-        new_Array = SymArray(new_Array)  #, history=[{'Col Switch': index_list}])
+        # , history=[{'Col Switch': index_list}])
+        new_Array = SymArray(new_Array)
         # new_Array.history = self.history + new_Array.history
         return new_Array
 
@@ -216,7 +229,7 @@ class Reduktor():
             for j in range(1000):
                 col_perm = np.random.permutation(8)
                 # print(j)
-                if j%2 == 0 or j%3 == 0:
+                if j % 2 == 0 or j % 3 == 0:
                     continue
                 test_array = new_Array.switch_cols(col_perm)
 
@@ -230,16 +243,54 @@ class Reduktor():
         end_time = time.time()
         print(f"Time elapsed: {(end_time - time0)/60} min")
 
+    # def strip_sign(self):
+    #     a = self.array_ojb.array.__array__()[0][0]
+    #     b = self.array_ojb.array.__array__()[0][1]
+    #     c = self.array_ojb.array.__array__()[0][2]
+
+    #     # print(sign(a) == sign(b))
+    #     print(f"a: {a}")
+    #     print(sign(a).is_symbol)
+    #     print(sign(a).is_positive)
+    #     print(sign(a).is_Not)
+    #     print(sign(a).is_negative)
+    #     print(sign(a).is_nonnegative)
+    #     print()
+    #     print(sign(b).is_symbol)
+    #     print(sign(b).is_positive)
+    #     print(sign(b).is_Not)
+    #     print(sign(b).is_negative)
+    #     print(sign(b).is_nonnegative)
+    #     # print(sign(b))
+    #     # print(sign(b))
+    #     # if sign(a):
+    #     #     print("a is true")
+    #     # if sign(b):
+    #     #     print("b is true")
+    #     # print(sign(aii.array.__array__()[0][0]))
+    #     print(dir(sign(a)))
+
 
 if __name__ == "__main__":
-    a = [['a', '-b', '-c', '-d', '-e', '-f', '-g', '-h'],
-         ['b', 'a', 'd', '-c', 'f', '-e', '-h', 'g'],
-         ['c', '-d', 'a', 'b', 'g', 'h', '-e', '-f'],
-         ['d', 'c', '-b', 'a', 'h', '-g', 'f', '-e'],
-         ['e', '-f', '-g', '-h', 'a', 'b', 'c', 'd'],
-         ['f', 'e', '-h', 'g', '-b', 'a', '-d', 'c'],
-         ['g', 'h', 'e', '-f', '-c', 'd', 'a', '-b'],
-         ['h', '-g', 'f', 'e', '-d', '-c', 'b', 'a']]
+    ' a = a(w1 * -1)'  # !!
+    a = [['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'],
+         ['b', 'a', 'd', 'c', 'f', 'e', 'h', 'g'],
+         ['c', 'd', 'a', 'b', 'g', 'h', 'e', 'f'],
+         ['d', 'c', 'b', 'a', 'h', 'g', 'f', 'e'],
+         ['e', 'f', 'g', 'h', 'a', 'b', 'c', 'd'],
+         ['f', 'e', 'h', 'g', 'b', 'a', 'd', 'c'],
+         ['g', 'h', 'e', 'f', 'c', 'd', 'a', 'b'],
+         ['h', 'g', 'f', 'e', 'd', 'c', 'b', 'a']]
+
+    E = [['a', 0, 0, 0, 0, 0, 0, 0],
+         [0, 0, 0, 'c', 0, 'e', 'h', 0],
+         [0, 'd', 0, 0, 0, 0, 'e', 'f'],
+         [0, 0, 'b', 0, 0, 'g', 0, 'e'],
+         [0, 'f', 'g', 'h', 0, 0, 0, 0],
+         [0, 0, 'h', 0, 'b', 0, 'd', 0],
+         [0, 0, 0, 'f', 'c', 0, 0, 'b'],
+         [0, 'g', 0, 0, 'd', 'c', 0, 0]]
 
     red = Reduktor(a)
+    # red.strip_sign()
     red.run()

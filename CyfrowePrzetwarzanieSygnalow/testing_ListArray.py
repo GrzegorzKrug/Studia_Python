@@ -43,9 +43,9 @@ class TestingSymArray(unittest.TestCase):
         B = SymArray(b)
         C = SymArray(c)
 
-        self.assertTrue(A.match_patern_any())
-        self.assertFalse(B.match_patern_any())
-        self.assertRaises(ValueError, C.match_patern_any)
+        self.assertTrue(A.match_any_patern())
+        self.assertFalse(B.match_any_patern())
+        self.assertRaises(ValueError, C.match_any_patern)
 
     def test_traspose(self):
         a = [['a', 'g'],
@@ -166,8 +166,8 @@ class TestingSymArray(unittest.TestCase):
         self.assertEqual(new_array_b, SymArray(ar1_b))
         self.assertEqual(new_array_c, SymArray(ar1_c))
 
-    def test_1d_rows_cols_swtich(self):
-        pass
+    # def test_1d_rows_cols_swtich(self):
+    #     pass
 
     def test_rowcols_change(self):
         ar0 = [['a', 'b', 'c'],
