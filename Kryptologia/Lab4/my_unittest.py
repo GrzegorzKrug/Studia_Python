@@ -3,13 +3,9 @@ import unittest
 
 
 class UnitTest(unittest.TestCase):
-    def test_LFSR(self):
-        reg1 = LinearFeedbackShiftRegister(config=5, init_state=10)
-        reg1 = LinearFeedbackShiftRegister(config=0b111, init_state=10)
-
     # def test_LFSR(self):
     #     reg1 = LinearFeedbackShiftRegister(config=5, init_state=10)
-    #     # print(reg1)
+        # reg1 = LinearFeedbackShiftRegister(config=0b111, init_state=10)
 
     def test_next_step(self):
         reg1 = LinearFeedbackShiftRegister(config=0, init_state=4)
