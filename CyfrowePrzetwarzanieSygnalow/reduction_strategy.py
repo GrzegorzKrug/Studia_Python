@@ -205,12 +205,12 @@ class SymArray:
         square_d = self[half_rows:self.size[0], half_cols:self.size[1]]
 
         return any([
-            square_a == square_b,
-            square_a == square_c,
+            # square_a == square_b,
+            # square_a == square_c,
             square_a == square_d,
-            square_b == square_c,
-            square_b == square_d,
-            square_c == square_d
+            # square_b == square_c,
+            # square_b == square_d,
+            # square_c == square_d
         ])
 
 
