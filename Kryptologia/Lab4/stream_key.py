@@ -1,35 +1,44 @@
 import numpy as np
+from collections import namedtuple
 
 
-class FeedbackShiftRegister:
-    def __init__(self, config=None, init_state=None, bits=8):
-        self._bits = bits
-        self._max_num = 2**bits - 1
+class LinearFeedbackShiftRegister:
+    def __init__(self, config=None, init_state=None, bit_size=8):
+        self._bit_size = bit_size
+        self._max_num = 2**bit_size - 1
 
         if init_state:
             self.state = init_state
         else:
             self.state = int(np.random.random()*(self._max_num - 1) + 1)
 
-        if config:
+        if not (config is None):
             self.config = (config % (self._max_num + 1))
+
         else:
             self.config = int(np.random.random()*(self._max_num - 1) + 1)
 
         self.config = bin(self.config)
-        # self.state = bin(self.state)
+
+    def __repr__(self):
+        name = "LFSRegister"
+        Point = namedtuple(name, ['config', 'bit_size', 'state'])
+        return str(Point(f'0b{self.config[2:]:>08}', self._bit_size, self.state))
+
+    def state(self):
+        pass
 
     def next_step(self):
-        out = bin(self.state)[-self._bits]
-        x = 1
-        print(config)
-        for i in range(self._bits):
-        	if self.config[-i] == '1':
-	        	x = x ^ self.state[-i]
-        
-        self.state.pop(0)
-        self.state.append(x)
-        return out
+        bin_state = bin(self.state)[2:].rjust(self._bit_size, '0')
+        bin_config = self.config[2:].rjust(self._bit_size, '0')
+
+        new_val = 1
+
+        for bit_id, bit in enumerate(bin_config):
+            if bit == '1':
+                new_val = new_val ^ int(bin_state[bit_id])
+
+        self.state = ((self.state << 1) | new_val) % (self._max_num + 1)
 
 
 # class Polynomial:  # Wielomian, liczenie wartosci w punktach x
@@ -49,5 +58,7 @@ class FeedbackShiftRegister:
 # 		for i, coeff in enumerate(self.coeffs):
 # 			y += x**i * coeff
 # 		return y, f'f({x}) = {y}'
-app = FeedbackShiftRegister(config=3, init_state=7)
-print(app.next_step())
+
+if __name__ == '__main__':
+    app = FeedbackShiftRegister(config=3, init_state=7)
+    print(app.next_step())
