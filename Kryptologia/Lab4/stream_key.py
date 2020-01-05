@@ -7,12 +7,12 @@ class LinearFeedbackShiftRegister:
         self._bit_size = bit_size
         self._max_num = 2**bit_size - 1
 
-        if init_state:
-            self.state = init_state
+        if not init_state is None:
+            self.state = init_state % (self._max_num + 1)
         else:
             self.state = int(np.random.random()*(self._max_num - 1) + 1)
 
-        if not (config is None):
+        if not config is None:
             self.config = (config % (self._max_num + 1))
 
         else:
@@ -40,24 +40,26 @@ class LinearFeedbackShiftRegister:
 
         self.state = ((self.state << 1) | new_val) % (self._max_num + 1)
 
+        return self.state
 
 # class Polynomial:  # Wielomian, liczenie wartosci w punktach x
-# 	def __init__(self, coeffs):
-# 		self.coeffs = coeffs
-# 		#print(f"New coeffs {self.coeffs}")
+#   def __init__(self, coeffs):
+#       self.coeffs = coeffs
+#       #print(f"New coeffs {self.coeffs}")
 
-# 	def __repr__(self):
-# 		txt = 'f(x) ='
-# 		for i in range(len(self.coeffs)-1, 0, -1):
-# 			txt += f' {self.coeffs[i]} *x^{i} +'
-# 		txt = txt[:-2] + f' + {self.coeffs[0]}'
-# 		return txt
+#   def __repr__(self):
+#       txt = 'f(x) ='
+#       for i in range(len(self.coeffs)-1, 0, -1):
+#           txt += f' {self.coeffs[i]} *x^{i} +'
+#       txt = txt[:-2] + f' + {self.coeffs[0]}'
+#       return txt
 
-# 	def __call__(self, x):
-# 		y = 0
-# 		for i, coeff in enumerate(self.coeffs):
-# 			y += x**i * coeff
-# 		return y, f'f({x}) = {y}'
+#   def __call__(self, x):
+#       y = 0
+#       for i, coeff in enumerate(self.coeffs):
+#           y += x**i * coeff
+#       return y, f'f({x}) = {y}'
+
 
 if __name__ == '__main__':
     app = FeedbackShiftRegister(config=3, init_state=7)
