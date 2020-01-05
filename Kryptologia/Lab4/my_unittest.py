@@ -50,8 +50,16 @@ class UnitTest(unittest.TestCase):
         self.assertEqual(0, reg1.last_bit)
 
     def test_next_step_lastbit(self):
+        reg1 = LinearFeedbackShiftRegister(config=0, init_state=191)
+        reg1.next_step()        
+        self.assertEqual(1, reg1.last_bit)
+
+        reg1.next_step()        
+        self.assertEqual(0, reg1.last_bit)
+
+
         reg2 = LinearFeedbackShiftRegister(config=0, init_state=143)
-        
+
         reg2.next_step()        
         self.assertEqual(1, reg2.last_bit)
 
