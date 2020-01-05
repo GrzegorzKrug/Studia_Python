@@ -21,16 +21,16 @@ class UnitTest(unittest.TestCase):
 
         reg1.next_step()
         self.assertEqual(3, reg1.state)
-    
+
     def test_parameters(self):
-        reg1 = LinearFeedbackShiftRegister(config=0, init_state=255)        
+        reg1 = LinearFeedbackShiftRegister(config=0, init_state=255)
         self.assertEqual(255, reg1._max_num)
         self.assertEqual(255, reg1.state)
-        
-        reg1 = LinearFeedbackShiftRegister(config=0, init_state=256)        
+
+        reg1 = LinearFeedbackShiftRegister(config=0, init_state=256)
         self.assertEqual(0, reg1.state)
 
-        reg1 = LinearFeedbackShiftRegister(config=0, init_state=260)        
+        reg1 = LinearFeedbackShiftRegister(config=0, init_state=260)
         self.assertEqual(4, reg1.state)
 
     def test_next_step_config_biger(self):
