@@ -19,6 +19,7 @@ class LinearFeedbackShiftRegister:
             self.config = int(np.random.random()*(self._max_num - 1) + 1)
 
         self.config = bin(self.config)
+        self.last_bit = None
 
     def __repr__(self):
         name = "LFSRegister"
@@ -33,14 +34,14 @@ class LinearFeedbackShiftRegister:
         bin_config = self.config[2:].rjust(self._bit_size, '0')
 
         new_val = 1
-
+        self.last_bit = self.state >> (self._bit_size - 1)
         for bit_id, bit in enumerate(bin_config):
             if bit == '1':
                 new_val = new_val ^ int(bin_state[bit_id])
 
-        self.state = ((self.state << 1) | new_val) % (self._max_num + 1)
 
-        return self.state
+        self.state = ((self.state << 1) | new_val) & self._max_num
+        return self.last_bit 
 
 # class Polynomial:  # Wielomian, liczenie wartosci w punktach x
 #   def __init__(self, coeffs):
