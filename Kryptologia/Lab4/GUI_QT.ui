@@ -58,7 +58,7 @@
              <string>0 is random value.</string>
             </property>
             <property name="text">
-             <string>13</string>
+             <string>0</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -260,7 +260,7 @@
            </widget>
           </item>
           <item row="9" column="0">
-           <widget class="QLineEdit" name="lineEdit_3">
+           <widget class="QLineEdit" name="lineEdit_geffe_config">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
               <horstretch>0</horstretch>
@@ -327,7 +327,7 @@
            </widget>
           </item>
           <item row="3" column="0">
-           <widget class="QSpinBox" name="spinBox">
+           <widget class="QSpinBox" name="spinBox_geffe_size">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
               <horstretch>0</horstretch>
@@ -375,7 +375,7 @@
            </spacer>
           </item>
           <item row="6" column="0">
-           <widget class="QLineEdit" name="lineEdit_2">
+           <widget class="QLineEdit" name="lineEdit_geffe_init_state">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
               <horstretch>0</horstretch>
@@ -386,7 +386,7 @@
              <string>0 is random value.</string>
             </property>
             <property name="text">
-             <string>13</string>
+             <string>0</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -428,14 +428,14 @@ Generator Geffe’go</string>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_7">
+           <widget class="QPushButton" name="pushButton_geffe_next">
             <property name="text">
              <string>Next</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_8">
+           <widget class="QPushButton" name="pushButton_geffe_next15">
             <property name="text">
              <string>Next x 15</string>
             </property>
@@ -597,7 +597,7 @@ Shrinking Generator</string>
              <enum>Qt::LeftToRight</enum>
             </property>
             <property name="text">
-             <string>13</string>
+             <string>0</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -721,7 +721,7 @@ Shrinking Generator</string>
            </widget>
           </item>
           <item>
-           <widget class="QTextBrowser" name="textBrowser">
+           <widget class="QTextBrowser" name="text_geffe_state">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Maximum">
               <horstretch>0</horstretch>
@@ -747,7 +747,7 @@ Shrinking Generator</string>
            </widget>
           </item>
           <item>
-           <widget class="QTextBrowser" name="textBrowser_2">
+           <widget class="QTextBrowser" name="text_geffe_stream">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Maximum">
               <horstretch>0</horstretch>
