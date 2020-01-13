@@ -84,11 +84,27 @@ class StopAndGoGenerator:
         else:
             raise ValueError("Clock is not in <1,2,3> values")
 
-        x1 = self.reg1.last_bit
+        # x1 = self.reg1.last_bit
         x2 = self.reg2.last_bit
         x3 = self.reg3.last_bit
 
-        self.last_bit = (x1 & x2) | ((x2 ^ 1) & x3)
+        self.last_bit = (x2+x3) % 2
+        return self.last_bit
+
+
+class ShrinkingGenerator:
+    def __init__(self):
+        self.reg1 = LinearFeedbackShiftRegister()
+        self.reg2 = LinearFeedbackShiftRegister()
+        self.last_bit = None
+
+    def next(self):
+        self.reg1.next_step()
+        self.reg2.next_step()
+
+        if self.reg1.last_bit == 1:
+            self.last_bit = self.reg2.last_bit        
+
         return self.last_bit
 
 

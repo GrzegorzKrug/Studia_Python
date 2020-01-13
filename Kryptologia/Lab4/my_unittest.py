@@ -1,4 +1,4 @@
-from stream_key import LinearFeedbackShiftRegister, GeffeGenerator
+from stream_key import LinearFeedbackShiftRegister, GeffeGenerator, StopAndGoGenerator
 import unittest
 
 
