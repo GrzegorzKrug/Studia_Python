@@ -1,4 +1,7 @@
-from stream_key import LinearFeedbackShiftRegister, GeffeGenerator, StopAndGoGenerator
+from stream_key import (LinearFeedbackShiftRegister,
+                        GeffeGenerator,
+                        StopAndGoGenerator,
+                        ShrinkingGenerator)
 import unittest
 
 
@@ -99,7 +102,6 @@ class UnitTest(unittest.TestCase):
         reg3.next_step()
         self.assertEqual(35, reg3.state)
 
-
     def test_initial_binary(self):
         reg1 = LinearFeedbackShiftRegister(config=0, init_state=bin(255))
         self.assertEqual(255, reg1._max_num)
@@ -119,7 +121,11 @@ class UnitTest(unittest.TestCase):
 
         reg2.next_step()
         self.assertEqual(53, reg2.state)
-    
+
+    def test_generators(self):
+        app1 = GeffeGenerator()
+        app2 = StopAndGoGenerator()
+        app3 = ShrinkingGenerator()
 
 
 unittest.main()

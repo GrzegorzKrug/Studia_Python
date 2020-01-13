@@ -49,10 +49,13 @@ class LinearFeedbackShiftRegister:
 
 
 class GeffeGenerator:
-    def __init__(self):
-        self.reg1 = LinearFeedbackShiftRegister()
-        self.reg2 = LinearFeedbackShiftRegister()
-        self.reg3 = LinearFeedbackShiftRegister()
+    def __init__(self, config=None, init_state=None, bit_size=8):
+        self.reg1 = LinearFeedbackShiftRegister(
+            config=config, init_state=init_state, bit_size=bit_size)
+        self.reg2 = LinearFeedbackShiftRegister(
+            config=config, init_state=init_state, bit_size=bit_size)
+        self.reg3 = LinearFeedbackShiftRegister(
+            config=config, init_state=init_state, bit_size=bit_size)
         self.last_bit = None
 
     def next(self):
@@ -70,10 +73,13 @@ class GeffeGenerator:
 
 
 class StopAndGoGenerator:
-    def __init__(self):
-        self.reg1 = LinearFeedbackShiftRegister()
-        self.reg2 = LinearFeedbackShiftRegister()
-        self.reg3 = LinearFeedbackShiftRegister()
+    def __init__(self, config=None, init_state=None, bit_size=8):
+        self.reg1 = LinearFeedbackShiftRegister(
+            config=config, init_state=init_state, bit_size=bit_size)
+        self.reg2 = LinearFeedbackShiftRegister(
+            config=config, init_state=init_state, bit_size=bit_size)
+        self.reg3 = LinearFeedbackShiftRegister(
+            config=config, init_state=init_state, bit_size=bit_size)
         self.last_bit = None
         self.clock_next = 0
 
@@ -98,9 +104,11 @@ class StopAndGoGenerator:
 
 
 class ShrinkingGenerator:
-    def __init__(self):
-        self.reg1 = LinearFeedbackShiftRegister()
-        self.reg2 = LinearFeedbackShiftRegister()
+    def __init__(self, config=None, init_state=None, bit_size=8):
+        self.reg1 = LinearFeedbackShiftRegister(
+            config=config, init_state=init_state, bit_size=bit_size)
+        self.reg2 = LinearFeedbackShiftRegister(
+            config=config, init_state=init_state, bit_size=bit_size)
         self.last_bit = None
 
     def next(self):
@@ -108,7 +116,7 @@ class ShrinkingGenerator:
         self.reg2.next_step()
 
         if self.reg1.last_bit == 1:
-            self.last_bit = self.reg2.last_bit        
+            self.last_bit = self.reg2.last_bit
 
         return self.last_bit
 

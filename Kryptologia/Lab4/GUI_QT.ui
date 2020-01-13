@@ -54,6 +54,9 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="toolTip">
+             <string>0 is random value.</string>
+            </property>
             <property name="text">
              <string>13</string>
             </property>
@@ -162,6 +165,9 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="toolTip">
+             <string>Specify active bits in LFSR. 0 is random value. Use deciaml values.</string>
+            </property>
             <property name="text">
              <string>0</string>
             </property>
@@ -260,6 +266,9 @@
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+            <property name="toolTip">
+             <string>Specify active bits in LFSR. 0 is random value. Use deciaml values.</string>
             </property>
             <property name="text">
              <string>0</string>
@@ -372,6 +381,9 @@
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+            <property name="toolTip">
+             <string>0 is random value.</string>
             </property>
             <property name="text">
              <string>13</string>
@@ -578,6 +590,9 @@ Shrinking Generator</string>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="toolTip">
+             <string>0 is random value.</string>
+            </property>
             <property name="layoutDirection">
              <enum>Qt::LeftToRight</enum>
             </property>
@@ -618,6 +633,9 @@ Shrinking Generator</string>
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+            <property name="toolTip">
+             <string>Specify active bits in LFSR. 0 is random value. Use deciaml values.</string>
             </property>
             <property name="text">
              <string>0</string>
