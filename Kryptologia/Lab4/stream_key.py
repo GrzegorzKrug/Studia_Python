@@ -22,9 +22,9 @@ class LinearFeedbackShiftRegister:
 
         else:
             self.config = int(np.random.random()*(self._max_num - 1) + 1)
-
+        # print("new config: ", bin(self.config)[2:].rjust(bit_size, '0'), self.config)
         self.config = bin(self.config)
-        self.last_bit = None
+        self.last_bit = 0
 
     def __repr__(self):
         name = "LFSRegister"
@@ -63,7 +63,7 @@ class GeffeGenerator:
     def next(self):
         self.reg1.next_step()
         self.reg2.next_step()
-        self.reg3.next_step()        
+        self.reg3.next_step()
 
         x1 = self.reg1.last_bit
         x2 = self.reg2.last_bit
@@ -125,7 +125,7 @@ class ShrinkingGenerator:
             config=config, init_state=init_state, bit_size=bit_size)
         self.reg2 = LinearFeedbackShiftRegister(
             config=config, init_state=init_state, bit_size=bit_size)
-        self.last_bit = None
+        self.last_bit = 0
 
     def next(self):
         self.reg1.next_step()

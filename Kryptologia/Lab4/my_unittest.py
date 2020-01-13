@@ -26,7 +26,7 @@ class UnitTest(unittest.TestCase):
         reg1 = LinearFeedbackShiftRegister(config=0, init_state=255)
         self.assertEqual(255, reg1._max_num)
         self.assertEqual(255, reg1.state)
-        self.assertEqual(None, reg1.last_bit)
+        self.assertEqual(0, reg1.last_bit)
 
         reg1 = LinearFeedbackShiftRegister(config=0, init_state=256)
         self.assertEqual(0, reg1.state)
@@ -103,7 +103,7 @@ class UnitTest(unittest.TestCase):
         reg1 = LinearFeedbackShiftRegister(config=1, init_state=bin(255))
         self.assertEqual(255, reg1._max_num)
         self.assertEqual(255, reg1.state)
-        self.assertEqual(None, reg1.last_bit)
+        self.assertEqual(0, reg1.last_bit)
 
         reg1 = LinearFeedbackShiftRegister(config=1, init_state=bin(256))
         self.assertEqual(0, reg1.state)
@@ -119,10 +119,19 @@ class UnitTest(unittest.TestCase):
         reg2.next_step()
         self.assertEqual(53, reg2.state)
 
-    def test_generators(self):
+    def test_gen_geffe(self):
         app1 = GeffeGenerator()
-        app2 = StopAndGoGenerator()
-        app3 = ShrinkingGenerator()
+        app1.next()
+
+    def test_gen_stopandgo(self):
+        app1 = StopAndGoGenerator()
+        app1.next()
+
+    def test_gen_shrinking(self):
+        app1 = ShrinkingGenerator()
+        app1.next()
+
+
 
 
 unittest.main()

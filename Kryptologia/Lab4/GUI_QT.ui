@@ -27,7 +27,7 @@
        <number>0</number>
       </property>
       <item row="0" column="0">
-       <layout class="QGridLayout" name="grid_Generators" rowstretch="1,1,1" columnstretch="1,1,4">
+       <layout class="QGridLayout" name="grid_Generators" rowstretch="1,1,1" columnstretch="1,1,100">
         <property name="sizeConstraint">
          <enum>QLayout::SetDefaultConstraint</enum>
         </property>
@@ -47,7 +47,7 @@
            </spacer>
           </item>
           <item row="5" column="0">
-           <widget class="QLineEdit" name="lineEdit_4">
+           <widget class="QLineEdit" name="lineEdit_stopandgo_init_state">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
               <horstretch>0</horstretch>
@@ -79,7 +79,7 @@
            </spacer>
           </item>
           <item row="2" column="0">
-           <widget class="QSpinBox" name="spinBox_2">
+           <widget class="QSpinBox" name="spinBox_stopandgo_size">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
               <horstretch>0</horstretch>
@@ -158,7 +158,7 @@
            </widget>
           </item>
           <item row="8" column="0">
-           <widget class="QLineEdit" name="lineEdit_5">
+           <widget class="QLineEdit" name="lineEdit_stopandgo_config">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
               <horstretch>0</horstretch>
@@ -411,7 +411,7 @@
         <item row="0" column="1">
          <layout class="QVBoxLayout" name="verticalLayout_geffe">
           <item>
-           <widget class="QPushButton" name="pushButton_run_Geffe">
+           <widget class="QPushButton" name="pushButton_new_Geffe">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
               <horstretch>0</horstretch>
@@ -435,7 +435,7 @@ Generator Geffe’go</string>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_geffe_next15">
+           <widget class="QPushButton" name="pushButton_geffe_next_xtimes">
             <property name="text">
              <string>Next x 15</string>
             </property>
@@ -446,7 +446,7 @@ Generator Geffe’go</string>
         <item row="1" column="1">
          <layout class="QVBoxLayout" name="verticalLayout_stopandgo">
           <item>
-           <widget class="QPushButton" name="pushButton_run_stopsndgo">
+           <widget class="QPushButton" name="pushButton_new_stopandgo">
             <property name="styleSheet">
              <string notr="true">background-color: rgb(138, 226, 52);</string>
             </property>
@@ -457,14 +457,14 @@ Stop-and-Go</string>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_10">
+           <widget class="QPushButton" name="pushButton_stopandgo_next">
             <property name="text">
              <string>Next</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_9">
+           <widget class="QPushButton" name="pushButton_stopandgo_next_xtimes">
             <property name="text">
              <string>Next x 15</string>
             </property>
@@ -475,7 +475,7 @@ Stop-and-Go</string>
         <item row="2" column="1">
          <layout class="QVBoxLayout" name="verticalLayout_shrinking">
           <item>
-           <widget class="QPushButton" name="pushButton_run_shrinking">
+           <widget class="QPushButton" name="pushButton_new_shrinking">
             <property name="styleSheet">
              <string notr="true">background-color: rgb(138, 226, 52);</string>
             </property>
@@ -486,14 +486,14 @@ Shrinking Generator</string>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_12">
+           <widget class="QPushButton" name="pushButton_shrinking_next">
             <property name="text">
              <string>Next</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_11">
+           <widget class="QPushButton" name="pushButton_shrinking_next_xtimes">
             <property name="text">
              <string>Next x 15</string>
             </property>
@@ -583,7 +583,7 @@ Shrinking Generator</string>
            </spacer>
           </item>
           <item row="5" column="0">
-           <widget class="QLineEdit" name="lineEdit_6">
+           <widget class="QLineEdit" name="lineEdit_shrinking_init_state">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
               <horstretch>0</horstretch>
@@ -605,7 +605,7 @@ Shrinking Generator</string>
            </widget>
           </item>
           <item row="2" column="0">
-           <widget class="QSpinBox" name="spinBox_3">
+           <widget class="QSpinBox" name="spinBox_shrinking_size">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
               <horstretch>0</horstretch>
@@ -627,7 +627,7 @@ Shrinking Generator</string>
            </widget>
           </item>
           <item row="8" column="0">
-           <widget class="QLineEdit" name="lineEdit_7">
+           <widget class="QLineEdit" name="lineEdit_shrinking_config">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
               <horstretch>0</horstretch>
@@ -793,7 +793,7 @@ Shrinking Generator</string>
            </widget>
           </item>
           <item>
-           <widget class="QTextBrowser" name="textBrowser_5">
+           <widget class="QTextBrowser" name="text_stopandgo_state">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Maximum">
               <horstretch>0</horstretch>
@@ -819,7 +819,7 @@ Shrinking Generator</string>
            </widget>
           </item>
           <item>
-           <widget class="QTextBrowser" name="textBrowser_6">
+           <widget class="QTextBrowser" name="text_stopandgo_stream">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Maximum">
               <horstretch>0</horstretch>
@@ -865,7 +865,7 @@ Shrinking Generator</string>
            </widget>
           </item>
           <item>
-           <widget class="QTextBrowser" name="textBrowser_3">
+           <widget class="QTextBrowser" name="text_shrinking_state">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Maximum">
               <horstretch>0</horstretch>
@@ -891,7 +891,7 @@ Shrinking Generator</string>
            </widget>
           </item>
           <item>
-           <widget class="QTextBrowser" name="textBrowser_4">
+           <widget class="QTextBrowser" name="text_shrinking_stream">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Maximum">
               <horstretch>0</horstretch>
