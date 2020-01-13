@@ -143,9 +143,17 @@ class ShrinkingGenerator:
         return state
 
 
-if __name__ == '__main__':
-    app = GeffeGenerator()
+class MonoBitTest:
+    def __init__(self, stream):
+        if len(stream) < 100:
+            raise ValueError('Stream is too short')
+        elif len(stream) != 20000:
+            raise ValueError('Stream length must be 20.000')
 
-    for x in range(30):
-        app.next()
-        print(app.last_bit)
+        self._stream = stream
+        self.count = self._stream.count('1')
+
+    def run_test(self):
+        return self.count > 9725 and self.count < 10275
+
+
