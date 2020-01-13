@@ -26,8 +26,8 @@ class LinearFeedbackShiftRegister:
         Point = namedtuple(name, ['config', 'bit_size', 'state'])
         return str(Point(f'0b{self.config[2:]:>08}', self._bit_size, self.state))
 
-    def state(self):
-        pass
+    # def state(self):
+    #     pass
 
     def next_step(self):
         bin_state = bin(self.state)[2:].rjust(self._bit_size, '0')
@@ -39,29 +39,62 @@ class LinearFeedbackShiftRegister:
             if bit == '1':
                 new_val = new_val ^ int(bin_state[bit_id])
 
-
         self.state = ((self.state << 1) | new_val) & self._max_num
-        return self.last_bit 
+        return self.last_bit
 
-# class Polynomial:  # Wielomian, liczenie wartosci w punktach x
-#   def __init__(self, coeffs):
-#       self.coeffs = coeffs
-#       #print(f"New coeffs {self.coeffs}")
 
-#   def __repr__(self):
-#       txt = 'f(x) ='
-#       for i in range(len(self.coeffs)-1, 0, -1):
-#           txt += f' {self.coeffs[i]} *x^{i} +'
-#       txt = txt[:-2] + f' + {self.coeffs[0]}'
-#       return txt
+class GeffeGenerator:
+    def __init__(self):
+        self.reg1 = LinearFeedbackShiftRegister()
+        self.reg2 = LinearFeedbackShiftRegister()
+        self.reg3 = LinearFeedbackShiftRegister()
+        self.last_bit = None
 
-#   def __call__(self, x):
-#       y = 0
-#       for i, coeff in enumerate(self.coeffs):
-#           y += x**i * coeff
-#       return y, f'f({x}) = {y}'
+    def next(self):
+        self.reg1.next_step()
+        self.reg2.next_step()
+        self.reg3.next_step()
+        raise ValueError("Clock is not in <1,2,3> values")
+
+        x1 = self.reg1.last_bit
+        x2 = self.reg2.last_bit
+        x3 = self.reg3.last_bit
+
+        self.last_bit = (x1 & x2) | ((x2 ^ 1) & x3)
+        return self.last_bit
+
+
+class StopAndGoGenerator:
+    def __init__(self):
+        self.reg1 = LinearFeedbackShiftRegister()
+        self.reg2 = LinearFeedbackShiftRegister()
+        self.reg3 = LinearFeedbackShiftRegister()
+        self.last_bit = None
+        self.clock_next = 0
+
+    def next(self):
+
+        self.reg1.next_step()
+        self.clock_next = self.reg1.last_bit
+
+        if self.clock_next == 1:
+            self.reg2.next_step()
+        elif self.clock_next == 0:
+            self.reg3.next_step()
+        else:
+            raise ValueError("Clock is not in <1,2,3> values")
+
+        x1 = self.reg1.last_bit
+        x2 = self.reg2.last_bit
+        x3 = self.reg3.last_bit
+
+        self.last_bit = (x1 & x2) | ((x2 ^ 1) & x3)
+        return self.last_bit
 
 
 if __name__ == '__main__':
-    app = FeedbackShiftRegister(config=3, init_state=7)
-    print(app.next_step())
+    app = GeffeGenerator()
+
+    for x in range(30):
+        app.next()
+        print(app.last_bit)

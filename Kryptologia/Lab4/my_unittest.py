@@ -1,4 +1,4 @@
-from stream_key import LinearFeedbackShiftRegister
+from stream_key import LinearFeedbackShiftRegister, GeffeGenerator
 import unittest
 
 
@@ -40,7 +40,7 @@ class UnitTest(unittest.TestCase):
 
     def test_next_step_overflow(self):
         reg1 = LinearFeedbackShiftRegister(config=0, init_state=256)
-        
+
         reg1.next_step()
         self.assertEqual(1, reg1.state)
         self.assertEqual(0, reg1.last_bit)
@@ -51,16 +51,15 @@ class UnitTest(unittest.TestCase):
 
     def test_next_step_lastbit(self):
         reg1 = LinearFeedbackShiftRegister(config=0, init_state=191)
-        reg1.next_step()        
+        reg1.next_step()
         self.assertEqual(1, reg1.last_bit)
 
-        reg1.next_step()        
+        reg1.next_step()
         self.assertEqual(0, reg1.last_bit)
-
 
         reg2 = LinearFeedbackShiftRegister(config=0, init_state=143)
 
-        reg2.next_step()        
+        reg2.next_step()
         self.assertEqual(1, reg2.last_bit)
 
         reg2.next_step()
@@ -73,7 +72,7 @@ class UnitTest(unittest.TestCase):
         reg2.next_step()
         self.assertEqual(1, reg2.last_bit)
 
-    def test_next_step_config_1(self):
+    def test_next_step_config(self):
         reg1 = LinearFeedbackShiftRegister(config=1, init_state=13)
 
         reg1.next_step()
@@ -82,7 +81,7 @@ class UnitTest(unittest.TestCase):
         reg1.next_step()
         self.assertEqual(53, reg1.state)
 
-    def test_next_step_config_2(self):
+        # Test 2
         reg2 = LinearFeedbackShiftRegister(config=5, init_state=13)
 
         reg2.next_step()
@@ -91,7 +90,7 @@ class UnitTest(unittest.TestCase):
         reg2.next_step()
         self.assertEqual(54, reg2.state)
 
-    def test_next_step_config_3(self):
+        # Test 3
         reg3 = LinearFeedbackShiftRegister(config=21, init_state=8)
 
         reg3.next_step()
