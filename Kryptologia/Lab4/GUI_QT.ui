@@ -96,7 +96,7 @@
              <number>1</number>
             </property>
             <property name="value">
-             <number>8</number>
+             <number>16</number>
             </property>
            </widget>
           </item>
@@ -344,7 +344,7 @@
              <number>1</number>
             </property>
             <property name="value">
-             <number>8</number>
+             <number>16</number>
             </property>
            </widget>
           </item>
@@ -622,7 +622,7 @@ Shrinking Generator</string>
              <number>1</number>
             </property>
             <property name="value">
-             <number>8</number>
+             <number>16</number>
             </property>
            </widget>
           </item>
