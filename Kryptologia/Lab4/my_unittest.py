@@ -100,4 +100,26 @@ class UnitTest(unittest.TestCase):
         self.assertEqual(35, reg3.state)
 
 
+    def test_initial_binary(self):
+        reg1 = LinearFeedbackShiftRegister(config=0, init_state=bin(255))
+        self.assertEqual(255, reg1._max_num)
+        self.assertEqual(255, reg1.state)
+        self.assertEqual(None, reg1.last_bit)
+
+        reg1 = LinearFeedbackShiftRegister(config=0, init_state=bin(256))
+        self.assertEqual(0, reg1.state)
+
+        reg1 = LinearFeedbackShiftRegister(config=0, init_state=bin(260))
+        self.assertEqual(4, reg1.state)
+
+        reg2 = LinearFeedbackShiftRegister(config=1, init_state=bin(13))
+
+        reg2.next_step()
+        self.assertEqual(26, reg2.state)
+
+        reg2.next_step()
+        self.assertEqual(53, reg2.state)
+    
+
+
 unittest.main()

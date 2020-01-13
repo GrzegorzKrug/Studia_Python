@@ -8,11 +8,16 @@ class LinearFeedbackShiftRegister:
         self._max_num = 2**bit_size - 1
 
         if not init_state is None:
+            try:
+                init_state = int(init_state)
+            except ValueError:
+                init_state = int(init_state, 2)
+
             self.state = init_state % (self._max_num + 1)
         else:
             self.state = int(np.random.random()*(self._max_num - 1) + 1)
 
-        if not config is None:
+        if (not config is None) or config == 0:
             self.config = (config % (self._max_num + 1))
 
         else:
