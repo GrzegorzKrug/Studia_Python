@@ -3,7 +3,19 @@ from collections import namedtuple
 
 
 class LinearFeedbackShiftRegister:
-    def __init__(self, config=None, init_state=None, bit_size=8):
+    def __init__(self, setup=None,
+                 config=None, init_state=None, bit_size=8, xor_bit=-1):
+        if setup:
+            # print("my setup: ", setup)
+            try:
+                config = setup['config']
+                init_state = setup['init_state']
+                bit_size = setup['bit_size']
+                xor_bit = setup['xor_bit']
+
+            except NameError as ne:
+                print("Name error: ", ne)
+
         self._bit_size = bit_size
         self._max_num = 2**bit_size - 1
 
@@ -22,7 +34,11 @@ class LinearFeedbackShiftRegister:
 
         else:
             self.config = int(np.random.random()*(self._max_num - 1) + 1)
-        # print("new config: ", bin(self.config)[2:].rjust(bit_size, '0'), self.config)
+        if xor_bit > 1 or xor_bit < 0:
+            self.xor_bit = int(np.random.random()*2)
+        else:
+            self.xor_bit = xor_bit
+
         self.config = bin(self.config)
         self.last_bit = 0
 
@@ -38,7 +54,7 @@ class LinearFeedbackShiftRegister:
         bin_state = bin(self.state)[2:].rjust(self._bit_size, '0')
         bin_config = self.config[2:].rjust(self._bit_size, '0')
 
-        new_val = 1
+        new_val = self.xor_bit
         self.last_bit = self.state >> (self._bit_size - 1)
         for bit_id, bit in enumerate(bin_config):
             if bit == '1':
@@ -49,15 +65,13 @@ class LinearFeedbackShiftRegister:
 
 
 class GeffeGenerator:
-    def __init__(self, config=None, init_state=None, bit_size=8):
-        self._bit_size = bit_size
-
-        self.reg1 = LinearFeedbackShiftRegister(
-            config=config, init_state=init_state, bit_size=bit_size)
-        self.reg2 = LinearFeedbackShiftRegister(
-            config=config, init_state=init_state, bit_size=bit_size)
-        self.reg3 = LinearFeedbackShiftRegister(
-            config=config, init_state=init_state, bit_size=bit_size)
+    def __init__(self, reg1_setup=None, reg2_setup=None, reg3_setup=None):
+        self.reg1 = LinearFeedbackShiftRegister(setup=reg1_setup)
+        self.reg2 = LinearFeedbackShiftRegister(setup=reg2_setup)
+        self.reg3 = LinearFeedbackShiftRegister(setup=reg3_setup)
+        self.max_size = max(reg1_setup['bit_size'],
+                            reg2_setup['bit_size'],
+                            reg3_setup['bit_size'])
         self.last_bit = None
 
     def next(self):
@@ -74,26 +88,24 @@ class GeffeGenerator:
 
     def get_state(self):
         state = []
-        state.append(bin(self.reg1.state)[2:].rjust(self._bit_size, '0'))
-        state.append(bin(self.reg2.state)[2:].rjust(self._bit_size, '0'))
-        state.append(bin(self.reg3.state)[2:].rjust(self._bit_size, '0'))
+        state.append(bin(self.reg1.state)[2:].rjust(self.reg1._bit_size, '0'))
+        state.append(bin(self.reg2.state)[2:].rjust(self.reg2._bit_size, '0'))
+        state.append(bin(self.reg3.state)[2:].rjust(self.reg3._bit_size, '0'))
         return state
 
 
 class StopAndGoGenerator:
-    def __init__(self, config=None, init_state=None, bit_size=8):
-        self._bit_size = bit_size
-        self.reg1 = LinearFeedbackShiftRegister(
-            config=config, init_state=init_state, bit_size=bit_size)
-        self.reg2 = LinearFeedbackShiftRegister(
-            config=config, init_state=init_state, bit_size=bit_size)
-        self.reg3 = LinearFeedbackShiftRegister(
-            config=config, init_state=init_state, bit_size=bit_size)
+    def __init__(self, reg1_setup=None, reg2_setup=None, reg3_setup=None):
+        self.reg1 = LinearFeedbackShiftRegister(setup=reg1_setup)
+        self.reg2 = LinearFeedbackShiftRegister(setup=reg2_setup)
+        self.reg3 = LinearFeedbackShiftRegister(setup=reg3_setup)
+        self.max_size = max(reg1_setup['bit_size'],
+                            reg2_setup['bit_size'],
+                            reg3_setup['bit_size'])
         self.last_bit = None
         self.clock_next = 0
 
     def next(self):
-
         self.reg1.next_step()
         self.clock_next = self.reg1.last_bit
         if self.clock_next == 1:
@@ -103,7 +115,6 @@ class StopAndGoGenerator:
         else:
             raise ValueError("Clock is not in <1,2,3> values")
 
-        # x1 = self.reg1.last_bit
         x2 = self.reg2.last_bit
         x3 = self.reg3.last_bit
 
@@ -112,19 +123,18 @@ class StopAndGoGenerator:
 
     def get_state(self):
         state = []
-        state.append(bin(self.reg1.state)[2:].rjust(self._bit_size, '0'))
-        state.append(bin(self.reg2.state)[2:].rjust(self._bit_size, '0'))
-        state.append(bin(self.reg3.state)[2:].rjust(self._bit_size, '0'))
+        state.append(bin(self.reg1.state)[2:].rjust(self.reg1._bit_size, '0'))
+        state.append(bin(self.reg2.state)[2:].rjust(self.reg2._bit_size, '0'))
+        state.append(bin(self.reg3.state)[2:].rjust(self.reg3._bit_size, '0'))
         return state
 
 
 class ShrinkingGenerator:
-    def __init__(self, config=None, init_state=None, bit_size=8):
-        self._bit_size = bit_size
-        self.reg1 = LinearFeedbackShiftRegister(
-            config=config, init_state=init_state, bit_size=bit_size)
-        self.reg2 = LinearFeedbackShiftRegister(
-            config=config, init_state=init_state, bit_size=bit_size)
+    def __init__(self, reg1_setup=None, reg2_setup=None):
+        self.reg1 = LinearFeedbackShiftRegister(setup=reg1_setup)
+        self.reg2 = LinearFeedbackShiftRegister(setup=reg2_setup)
+        self.max_size = max(reg1_setup['bit_size'],
+                            reg2_setup['bit_size'])
         self.last_bit = 0
 
     def next(self):
@@ -138,8 +148,8 @@ class ShrinkingGenerator:
 
     def get_state(self):
         state = []
-        state.append(bin(self.reg1.state)[2:].rjust(self._bit_size, '0'))
-        state.append(bin(self.reg2.state)[2:].rjust(self._bit_size, '0'))
+        state.append(bin(self.reg1.state)[2:].rjust(self.reg1._bit_size, '0'))
+        state.append(bin(self.reg2.state)[2:].rjust(self.reg2._bit_size, '0'))
         return state
 
 
@@ -148,12 +158,12 @@ class MonoBitTest:
         if len(stream) < 100:
             raise ValueError('Stream is too short')
         elif len(stream) != 20000:
+            print("Error lenght:", len(stream))
             raise ValueError('Stream length must be 20.000')
+
 
         self._stream = stream
         self.count = self._stream.count('1')
 
     def run_test(self):
         return self.count > 9725 and self.count < 10275
-
-

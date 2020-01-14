@@ -53,12 +53,27 @@ class GUIApplication(Ui_MainWindow):
             self.test_shrinking_monobit)
 
     def new_geffe(self):
-        size = int(self.spinBox_geffe_size.value())
-        init_state = int(self.lineEdit_geffe_init_state.displayText())
-        config = int(self.lineEdit_geffe_config.displayText())
+        x1_cfg = {
+            "bit_size": int(self.spinBox_x1_size.value()),
+            "config": int(self.lineEdit_x1_config.displayText()),
+            "init_state": int(self.lineEdit_x1_init_state.displayText()),
+            "xor_bit": int(self.spinBox_x1_xor_bit.value())
+        }
+        x2_cfg = {
+            "bit_size": int(self.spinBox_x2_size.value()),
+            "config": int(self.lineEdit_x2_config.displayText()),
+            "init_state": int(self.lineEdit_x2_init_state.displayText()),
+            "xor_bit": int(self.spinBox_x2_xor_bit.value())
+        }
+        x3_cfg = {
+            "bit_size": int(self.spinBox_x3_size.value()),
+            "config": int(self.lineEdit_x3_config.displayText()),
+            "init_state": int(self.lineEdit_x3_init_state.displayText()),
+            "xor_bit": int(self.spinBox_x3_xor_bit.value())
+        }
 
         self._geffe = GeffeGenerator(
-            bit_size=size, init_state=init_state, config=config)
+            reg1_setup=x1_cfg, reg2_setup=x2_cfg, reg3_setup=x3_cfg)
         self._geffe_stream = ''
         self.show_geffe()
 
@@ -103,19 +118,34 @@ class GUIApplication(Ui_MainWindow):
 
         else:
             self.text_geffe_stream.setText(self._geffe_stream)
-
-            labels =["x1: ","x2: ", "x3: "]            
-            text = [''.join(x) for x in zip(labels, self._geffe.get_state())]
-            text = '\n'.join(text)            
+            labels = ["x1: ", "x2: ", "x3: "]
+            text = [lab + (state.rjust(self._geffe.max_size, ' '))
+                    for lab, state in zip(labels, self._geffe.get_state())]
+            text = '\n'.join(text)
             self.text_geffe_state.setText(text)
 
     def new_stopandgo(self):
-        size = int(self.spinBox_stopandgo_size.value())
-        init_state = int(self.lineEdit_stopandgo_init_state.displayText())
-        config = int(self.lineEdit_stopandgo_config.displayText())
+        x1_cfg = {
+            "bit_size": int(self.spinBox_x1_size.value()),
+            "config": int(self.lineEdit_x1_config.displayText()),
+            "init_state": int(self.lineEdit_x1_init_state.displayText()),
+            "xor_bit": int(self.spinBox_x1_xor_bit.value())
+        }
+        x2_cfg = {
+            "bit_size": int(self.spinBox_x2_size.value()),
+            "config": int(self.lineEdit_x2_config.displayText()),
+            "init_state": int(self.lineEdit_x2_init_state.displayText()),
+            "xor_bit": int(self.spinBox_x2_xor_bit.value())
+        }
+        x3_cfg = {
+            "bit_size": int(self.spinBox_x3_size.value()),
+            "config": int(self.lineEdit_x3_config.displayText()),
+            "init_state": int(self.lineEdit_x3_init_state.displayText()),
+            "xor_bit": int(self.spinBox_x3_xor_bit.value())
+        }
 
         self._stopandgo = StopAndGoGenerator(
-            bit_size=size, init_state=init_state, config=config)
+            reg1_setup=x1_cfg, reg2_setup=x2_cfg, reg3_setup=x3_cfg)
         self._stopandgo_stream = ''
         self.show_stopandgo()
 
@@ -126,8 +156,9 @@ class GUIApplication(Ui_MainWindow):
                 + self._stopandgo_stream
             self.show_stopandgo()
 
-        except AttributeError:
+        except AttributeError as AE:
             self.show_stopandgo(empty=True)
+            print(AE)
 
     def next_stopandgo_xtimes(self, n):
         try:
@@ -160,18 +191,28 @@ class GUIApplication(Ui_MainWindow):
         else:
             self.text_stopandgo_stream.setText(self._stopandgo_stream)
 
-            labels =["x1: ","x2: ", "x3: "]            
-            text = [''.join(x) for x in zip(labels, self._stopandgo.get_state())]
+            labels = ["x1: ", "x2: ", "x3: "]
+            text = [lab + (state.rjust(self._stopandgo.max_size, ' '))
+                    for lab, state in zip(labels, self._stopandgo.get_state())]
             text = '\n'.join(text)
             self.text_stopandgo_state.setText(text)
 
     def new_shrinking(self):
-        size = int(self.spinBox_shrinking_size.value())
-        init_state = int(self.lineEdit_shrinking_init_state.displayText())
-        config = int(self.lineEdit_shrinking_config.displayText())
+        x1_cfg = {
+            "bit_size": int(self.spinBox_x1_size.value()),
+            "config": int(self.lineEdit_x1_config.displayText()),
+            "init_state": int(self.lineEdit_x1_init_state.displayText()),
+            "xor_bit": int(self.spinBox_x1_xor_bit.value())
+        }
+        x2_cfg = {
+            "bit_size": int(self.spinBox_x2_size.value()),
+            "config": int(self.lineEdit_x2_config.displayText()),
+            "init_state": int(self.lineEdit_x2_init_state.displayText()),
+            "xor_bit": int(self.spinBox_x2_xor_bit.value())
+        }
 
         self._shrinking = ShrinkingGenerator(
-            bit_size=size, init_state=init_state, config=config)
+            reg1_setup=x1_cfg, reg2_setup=x2_cfg)
 
         self._shrinking_stream = ''
         self.show_shrinking()
@@ -197,9 +238,10 @@ class GUIApplication(Ui_MainWindow):
         except AttributeError:
             self.show_shrinking(empty=True)
 
-    def shrinking_fill_to(self, n):
+    def shrinking_fill_to(self, N):
         try:
-            for i in range(n - len(self._shrinking_stream)):
+            n = N - len(self._shrinking_stream)
+            for i in range(n):
                 self._shrinking.next()
                 self._shrinking_stream = str(self._shrinking.last_bit) \
                     + self._shrinking_stream
@@ -214,58 +256,62 @@ class GUIApplication(Ui_MainWindow):
             self.text_shrinking_state.setText("Generator is not defined")
         else:
             self.text_shrinking_stream.setText(self._shrinking_stream)
-            
-            labels =["x1: ","x2: "]            
-            text = [''.join(x) for x in zip(labels, self._shrinking.get_state())]
+
+            labels = ["x1: ", "x2: "]
+            text = [lab + (state.rjust(self._shrinking.max_size, ' '))
+                    for lab, state in zip(labels, self._shrinking.get_state())]
             text = '\n'.join(text)
             self.text_shrinking_state.setText(text)
 
     def test_gefe_monobit(self):
-        if len(self._geffe_stream) >= 20000 \
-                or len(self._geffe_stream) < 1:
-            self.new_geffe()
-        self.geffe_fill_to(20000)
-        try:
-            test1 = MonoBitTest(self._geffe_stream)
-            result = "Mono Bit passed: " + str(test1.run_test())
+        for n in range(10):
+            if len(self._geffe_stream) >= 20000 \
+                    or len(self._geffe_stream) < 1:
+                self.new_geffe()
+            self.geffe_fill_to(20000)
+            try:
+                test1 = MonoBitTest(self._geffe_stream)
+                result = "Mono Bit passed: " + str(test1.run_test())
 
-        except ValueError as ve:
-            result = "Error! " + str(ve)
+            except ValueError as ve:
+                result = "Error! " + str(ve)
 
-        old_text = self.textBrowser_geffe_results.toPlainText()
-        self.textBrowser_geffe_results.setText(result + "\n" + old_text)
+            old_text = self.textBrowser_geffe_results.toPlainText()
+            self.textBrowser_geffe_results.setText(result + "\n" + old_text)
 
     def test_stopandgo_monobit(self):
-        if len(self._stopandgo_stream) >= 20000 \
-                or len(self._stopandgo_stream) < 1:
-            self.new_stopandgo()
-        self.stopandgo_fill_to(20000)
-        try:
-            test1 = MonoBitTest(self._stopandgo_stream)
-            result = "Mono Bit passed: " + str(test1.run_test())
+        for n in range(10):
+            if len(self._stopandgo_stream) >= 20000 \
+                    or len(self._stopandgo_stream) < 1:
+                self.new_stopandgo()
+            self.stopandgo_fill_to(20000)
+            try:
+                test1 = MonoBitTest(self._stopandgo_stream)
+                result = "Mono Bit passed: " + str(test1.run_test())
 
-        except ValueError as ve:
-            result = "Error! " + str(ve)
+            except ValueError as ve:
+                result = "Error! " + str(ve)
 
-        old_text = self.textBrowser_stopandgo_results.toPlainText()
-        self.textBrowser_stopandgo_results.setText(result
-                                                   + "\n"+old_text)
+            old_text = self.textBrowser_stopandgo_results.toPlainText()
+            self.textBrowser_stopandgo_results.setText(result
+                                                       + "\n"+old_text)
 
     def test_shrinking_monobit(self):
-        if len(self._shrinking_stream) >= 20000  \
-                or len(self._shrinking_stream) < 1:
-            self.new_shrinking()
-        self.shrinking_fill_to(20000)
-        try:
-            test1 = MonoBitTest(self._shrinking_stream)
-            result = "Mono Bit passed: " + str(test1.run_test())
+        for n in range(10):
+            if len(self._shrinking_stream) >= 20000  \
+                    or len(self._shrinking_stream) < 1:
+                self.new_shrinking()
+            self.shrinking_fill_to(20000)
+            try:
+                test1 = MonoBitTest(self._shrinking_stream)
+                result = "Mono Bit passed: " + str(test1.run_test())
 
-        except ValueError as ve:
-            result = "Error! " + str(ve)
+            except ValueError as ve:
+                result = "Error! " + str(ve)
 
-        old_text = self.textBrowser_shrinking_results.toPlainText()
-        self.textBrowser_shrinking_results.setText(result
-                                                   + "\n"+old_text)
+            old_text = self.textBrowser_shrinking_results.toPlainText()
+            self.textBrowser_shrinking_results.setText(result
+                                                       + "\n"+old_text)
 
 
 if QtCore.QT_VERSION >= 0x50501:  # Showing traceback from crashes
