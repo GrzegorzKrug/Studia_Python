@@ -161,9 +161,35 @@ class MonoBitTest:
             print("Error lenght:", len(stream))
             raise ValueError('Stream length must be 20.000')
 
-
         self._stream = stream
         self.count = self._stream.count('1')
 
     def run_test(self):
         return self.count > 9725 and self.count < 10275
+
+
+class LongRunTest:
+    def __init__(self, stream):
+        if len(stream) < 100:
+            raise ValueError('Stream is too short')
+        elif len(stream) != 20000:
+            print("Error lenght:", len(stream))
+            raise ValueError('Stream length must be 20.000')
+
+        self._stream = stream
+        self.count = self._stream.count('1')
+
+    def run_test(self):
+        val = 0
+        current = None
+        for letter in self._stream:
+            if letter == current:
+                val += 1
+            else:
+                current = letter
+                val = 1
+
+            if val > 26:
+                return False
+
+        return True

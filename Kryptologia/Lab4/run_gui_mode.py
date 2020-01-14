@@ -3,7 +3,8 @@ from stream_key import (LinearFeedbackShiftRegister,
                         GeffeGenerator,
                         StopAndGoGenerator,
                         ShrinkingGenerator,
-                        MonoBitTest)
+                        MonoBitTest,
+                        LongRunTest)
 from GUI_ReadOnly import Ui_MainWindow
 import sys
 import traceback
@@ -33,6 +34,8 @@ class GUIApplication(Ui_MainWindow):
             lambda: self.geffe_fill_to(20000))
         self.pushButton_gefe_test_monobit.clicked.connect(
             self.test_gefe_monobit)
+        self.pushButton_geffe_test_long_run.clicked.connect(
+            self.test_gefe_longrun)
 
         self.pushButton_new_stopandgo.clicked.connect(self.new_stopandgo)
         self.pushButton_stopandgo_next.clicked.connect(self.next_stopandgo)
@@ -42,6 +45,8 @@ class GUIApplication(Ui_MainWindow):
             lambda: self.stopandgo_fill_to(20000))
         self.pushButton_stopandgo_test_monobit.clicked.connect(
             self.test_stopandgo_monobit)
+        self.pushButton_stopandgo_test_long_run.clicked.connect(
+            self.test_stopandgo_longrun)
 
         self.pushButton_new_shrinking.clicked.connect(self.new_shrinking)
         self.pushButton_shrinking_next.clicked.connect(self.next_shrinking)
@@ -51,6 +56,22 @@ class GUIApplication(Ui_MainWindow):
             lambda: self.shrinking_fill_to(20000))
         self.pushButton_shrinking_test_monobit.clicked.connect(
             self.test_shrinking_monobit)
+        self.pushButton_shrinking_test_long_run.clicked.connect(
+            self.test_shrinking_longrun)
+
+        self.pushButton_geffe_clear.clicked.connect(self.clear_geffe_results)
+        self.pushButton_stopandgo_clear.clicked.connect(self.clear_stopandgo_results)
+        self.pushButton_shrinking_clear.clicked.connect(self.clear_shrinking_results)
+
+
+    def clear_geffe_results(self):
+        self.textBrowser_geffe_results.setText("")
+
+    def clear_stopandgo_results(self):
+        self.textBrowser_stopandgo_results.setText("")
+
+    def clear_shrinking_results(self):
+        self.textBrowser_shrinking_results.setText("")
 
     def new_geffe(self):
         x1_cfg = {
@@ -305,6 +326,56 @@ class GUIApplication(Ui_MainWindow):
             try:
                 test1 = MonoBitTest(self._shrinking_stream)
                 result = "Mono Bit passed: " + str(test1.run_test())
+
+            except ValueError as ve:
+                result = "Error! " + str(ve)
+
+            old_text = self.textBrowser_shrinking_results.toPlainText()
+            self.textBrowser_shrinking_results.setText(result
+                                                       + "\n"+old_text)
+
+    def test_gefe_longrun(self):
+        for n in range(10):
+            if len(self._geffe_stream) >= 20000 \
+                    or len(self._geffe_stream) < 1:
+                self.new_geffe()
+            self.geffe_fill_to(20000)
+            try:
+                test1 = LongRunTest(self._geffe_stream)
+                result = "Long Run passed: " + str(test1.run_test())
+
+            except ValueError as ve:
+                result = "Error! " + str(ve)
+
+            old_text = self.textBrowser_geffe_results.toPlainText()
+            self.textBrowser_geffe_results.setText(result + "\n" + old_text)
+
+    def test_stopandgo_longrun(self):
+        for n in range(10):
+            if len(self._stopandgo_stream) >= 20000 \
+                    or len(self._stopandgo_stream) < 1:
+                self.new_stopandgo()
+            self.stopandgo_fill_to(20000)
+            try:
+                test1 = LongRunTest(self._stopandgo_stream)
+                result = "Long Run passed: " + str(test1.run_test())
+
+            except ValueError as ve:
+                result = "Error! " + str(ve)
+
+            old_text = self.textBrowser_stopandgo_results.toPlainText()
+            self.textBrowser_stopandgo_results.setText(result
+                                                       + "\n"+old_text)
+
+    def test_shrinking_longrun(self):
+        for n in range(10):
+            if len(self._shrinking_stream) >= 20000  \
+                    or len(self._shrinking_stream) < 1:
+                self.new_shrinking()
+            self.shrinking_fill_to(20000)
+            try:
+                test1 = LongRunTest(self._shrinking_stream)
+                result = "Long Run passed: " + str(test1.run_test())
 
             except ValueError as ve:
                 result = "Error! " + str(ve)
