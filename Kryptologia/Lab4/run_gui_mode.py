@@ -4,7 +4,8 @@ from stream_key import (LinearFeedbackShiftRegister,
                         StopAndGoGenerator,
                         ShrinkingGenerator,
                         MonoBitTest,
-                        LongRunTest)
+                        LongRunTest,
+                        PokerTest)
 from GUI_ReadOnly import Ui_MainWindow
 import sys
 import traceback
@@ -60,9 +61,14 @@ class GUIApplication(Ui_MainWindow):
             self.test_shrinking_longrun)
 
         self.pushButton_geffe_clear.clicked.connect(self.clear_geffe_results)
-        self.pushButton_stopandgo_clear.clicked.connect(self.clear_stopandgo_results)
-        self.pushButton_shrinking_clear.clicked.connect(self.clear_shrinking_results)
+        self.pushButton_stopandgo_clear.clicked.connect(
+            self.clear_stopandgo_results)
+        self.pushButton_shrinking_clear.clicked.connect(
+            self.clear_shrinking_results)
 
+        self.pushButton_geffe_poker.clicked.connect(self.test_gefe_poker)
+        self.pushButton_stopandgo_poker.clicked.connect(self.test_stopandgo_poker)
+        self.pushButton_shrinking_poker.clicked.connect(self.test_shrinking_poker)
 
     def clear_geffe_results(self):
         self.textBrowser_geffe_results.setText("")
@@ -376,6 +382,56 @@ class GUIApplication(Ui_MainWindow):
             try:
                 test1 = LongRunTest(self._shrinking_stream)
                 result = "Long Run passed: " + str(test1.run_test())
+
+            except ValueError as ve:
+                result = "Error! " + str(ve)
+
+            old_text = self.textBrowser_shrinking_results.toPlainText()
+            self.textBrowser_shrinking_results.setText(result
+                                                       + "\n"+old_text)
+
+    def test_gefe_poker(self):
+        for n in range(10):
+            if len(self._geffe_stream) >= 20000 \
+                    or len(self._geffe_stream) < 1:
+                self.new_geffe()
+            self.geffe_fill_to(20000)
+            try:
+                test1 = PokerTest(self._geffe_stream)
+                result = "Poker test passed: " + str(test1.run_test())
+
+            except ValueError as ve:
+                result = "Error! " + str(ve)
+
+            old_text = self.textBrowser_geffe_results.toPlainText()
+            self.textBrowser_geffe_results.setText(result + "\n" + old_text)
+
+    def test_stopandgo_poker(self):
+        for n in range(10):
+            if len(self._stopandgo_stream) >= 20000 \
+                    or len(self._stopandgo_stream) < 1:
+                self.new_stopandgo()
+            self.stopandgo_fill_to(20000)
+            try:
+                test1 = PokerTest(self._stopandgo_stream)
+                result = "Poker test passed: " + str(test1.run_test())
+
+            except ValueError as ve:
+                result = "Error! " + str(ve)
+
+            old_text = self.textBrowser_stopandgo_results.toPlainText()
+            self.textBrowser_stopandgo_results.setText(result
+                                                       + "\n"+old_text)
+
+    def test_shrinking_poker(self):
+        for n in range(10):
+            if len(self._shrinking_stream) >= 20000  \
+                    or len(self._shrinking_stream) < 1:
+                self.new_shrinking()
+            self.shrinking_fill_to(20000)
+            try:
+                test1 = PokerTest(self._shrinking_stream)
+                result = "Poker test passed: " + str(test1.run_test())
 
             except ValueError as ve:
                 result = "Error! " + str(ve)

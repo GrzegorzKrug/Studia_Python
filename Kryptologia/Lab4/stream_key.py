@@ -177,7 +177,6 @@ class LongRunTest:
             raise ValueError('Stream length must be 20.000')
 
         self._stream = stream
-        self.count = self._stream.count('1')
 
     def run_test(self):
         val = 0
@@ -191,5 +190,27 @@ class LongRunTest:
 
             if val > 26:
                 return False
-
         return True
+
+
+class PokerTest:
+    def __init__(self, stream):
+        if len(stream) < 100:
+            raise ValueError('Stream is too short')
+        elif len(stream) != 20000:
+            print("Error lenght:", len(stream))
+            raise ValueError('Stream length must be 20.000')
+        self._stream = stream
+
+    def run_test(self):
+        combinations = {}
+        for i in range(0, len(self._stream)-3, 4):
+            pack = self._stream[i:i+4]
+            combinations[pack] = 1 + combinations.get(pack, 0)
+
+        epsilon = 0
+        for key, value in combinations.items():
+            epsilon += (value**2)
+        x = ((16/5000)*epsilon)-5000
+
+        return x > 2.16 and x < 46.17

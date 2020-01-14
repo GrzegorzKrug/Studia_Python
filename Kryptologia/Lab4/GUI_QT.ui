@@ -27,7 +27,7 @@
        <number>0</number>
       </property>
       <item row="0" column="2">
-       <layout class="QGridLayout" name="grid_Generators" rowstretch="1,0,0" columnstretch="1,0,0,0">
+       <layout class="QGridLayout" name="grid_Generators" rowstretch="1,1,1" columnstretch="1,100,1,1" columnminimumwidth="100,100,100,200">
         <property name="sizeConstraint">
          <enum>QLayout::SetDefaultConstraint</enum>
         </property>
@@ -178,9 +178,9 @@ Shrinking Generator</string>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_3">
+           <widget class="QPushButton" name="pushButton_shrinking_poker">
             <property name="text">
-             <string>PushButton</string>
+             <string>Test Poker</string>
             </property>
            </widget>
           </item>
@@ -416,9 +416,9 @@ Shrinking Generator</string>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_8">
+           <widget class="QPushButton" name="pushButton_stopandgo_poker">
             <property name="text">
-             <string>PushButton</string>
+             <string>Test Poker</string>
             </property>
            </widget>
           </item>
@@ -470,9 +470,9 @@ Shrinking Generator</string>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_6">
+           <widget class="QPushButton" name="pushButton_geffe_poker">
             <property name="text">
-             <string>PushButton</string>
+             <string>Test Poker</string>
             </property>
            </widget>
           </item>
