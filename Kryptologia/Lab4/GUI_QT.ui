@@ -435,7 +435,14 @@ Generator Geffe’go</string>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_geffe_next_xtimes">
+           <widget class="QPushButton" name="pushButton_geffe_next_15times">
+            <property name="text">
+             <string>Next x15</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_geffe_fill">
             <property name="text">
              <string>Fill to 20.000</string>
             </property>
@@ -464,9 +471,16 @@ Stop-and-Go</string>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_stopandgo_next_xtimes">
+           <widget class="QPushButton" name="pushButton_stopandgo_next_15times">
             <property name="text">
              <string>Next x 15</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_stopandgo_fill">
+            <property name="text">
+             <string>Fill to 20.000</string>
             </property>
            </widget>
           </item>
@@ -493,9 +507,16 @@ Shrinking Generator</string>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_shrinking_next_xtimes">
+           <widget class="QPushButton" name="pushButton_shrinking_next_15times">
             <property name="text">
              <string>Next x 15</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_shrinking_fill">
+            <property name="text">
+             <string>Fill to 20.000</string>
             </property>
            </widget>
           </item>
@@ -702,9 +723,9 @@ Shrinking Generator</string>
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_4">
+           <widget class="QPushButton" name="pushButton_shrinking_test_monobit">
             <property name="text">
-             <string>PushButton</string>
+             <string>Test Mono Bit</string>
             </property>
            </widget>
           </item>
@@ -884,9 +905,9 @@ Shrinking Generator</string>
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_9">
+           <widget class="QPushButton" name="pushButton_stopandgo_test_monobit">
             <property name="text">
-             <string>PushButton</string>
+             <string>Test Mono Bit</string>
             </property>
            </widget>
           </item>
@@ -1026,10 +1047,10 @@ Shrinking Generator</string>
          <widget class="QTextBrowser" name="textBrowser_geffe_results"/>
         </item>
         <item row="1" column="4">
-         <widget class="QTextBrowser" name="textBrowser_2"/>
+         <widget class="QTextBrowser" name="textBrowser_stopandgo_results"/>
         </item>
         <item row="2" column="4">
-         <widget class="QTextBrowser" name="textBrowser_3"/>
+         <widget class="QTextBrowser" name="textBrowser_shrinking_results"/>
         </item>
        </layout>
       </item>
