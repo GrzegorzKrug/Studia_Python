@@ -67,8 +67,10 @@ class GUIApplication(Ui_MainWindow):
             self.clear_shrinking_results)
 
         self.pushButton_geffe_poker.clicked.connect(self.test_gefe_poker)
-        self.pushButton_stopandgo_poker.clicked.connect(self.test_stopandgo_poker)
-        self.pushButton_shrinking_poker.clicked.connect(self.test_shrinking_poker)
+        self.pushButton_stopandgo_poker.clicked.connect(
+            self.test_stopandgo_poker)
+        self.pushButton_shrinking_poker.clicked.connect(
+            self.test_shrinking_poker)
 
     def clear_geffe_results(self):
         self.textBrowser_geffe_results.setText("")
@@ -298,7 +300,8 @@ class GUIApplication(Ui_MainWindow):
             self.geffe_fill_to(20000)
             try:
                 test1 = MonoBitTest(self._geffe_stream)
-                result = "Mono Bit passed: " + str(test1.run_test())
+                result = "Mono Bit("+f"{n+1}".rjust(2, " ") \
+                    + ") passed: " + str(test1.run_test())
 
             except ValueError as ve:
                 result = "Error! " + str(ve)
@@ -314,7 +317,8 @@ class GUIApplication(Ui_MainWindow):
             self.stopandgo_fill_to(20000)
             try:
                 test1 = MonoBitTest(self._stopandgo_stream)
-                result = "Mono Bit passed: " + str(test1.run_test())
+                result = "Mono Bit("+f"{n+1}".rjust(2, " ") \
+                    + ") passed: " + str(test1.run_test())
 
             except ValueError as ve:
                 result = "Error! " + str(ve)
@@ -331,7 +335,8 @@ class GUIApplication(Ui_MainWindow):
             self.shrinking_fill_to(20000)
             try:
                 test1 = MonoBitTest(self._shrinking_stream)
-                result = "Mono Bit passed: " + str(test1.run_test())
+                result = "Mono Bit("+f"{n+1}".rjust(2, " ") \
+                    + ") passed: " + str(test1.run_test())
 
             except ValueError as ve:
                 result = "Error! " + str(ve)
@@ -347,8 +352,9 @@ class GUIApplication(Ui_MainWindow):
                 self.new_geffe()
             self.geffe_fill_to(20000)
             try:
-                test1 = LongRunTest(self._geffe_stream)
-                result = "Long Run passed: " + str(test1.run_test())
+                test1 = LongRunTest(self._geffe_stream)                
+                result = "Long Runs("+f"{n+1}".rjust(2, " ") \
+                    + ") passed: " + str(test1.run_test())
 
             except ValueError as ve:
                 result = "Error! " + str(ve)
@@ -364,7 +370,8 @@ class GUIApplication(Ui_MainWindow):
             self.stopandgo_fill_to(20000)
             try:
                 test1 = LongRunTest(self._stopandgo_stream)
-                result = "Long Run passed: " + str(test1.run_test())
+                result = "Long Runs("+f"{n+1}".rjust(2, " ") \
+                    + ") passed: " + str(test1.run_test())
 
             except ValueError as ve:
                 result = "Error! " + str(ve)
@@ -381,7 +388,8 @@ class GUIApplication(Ui_MainWindow):
             self.shrinking_fill_to(20000)
             try:
                 test1 = LongRunTest(self._shrinking_stream)
-                result = "Long Run passed: " + str(test1.run_test())
+                result = "Long Runs("+f"{n+1}".rjust(2, " ") \
+                    + ") passed: " + str(test1.run_test())
 
             except ValueError as ve:
                 result = "Error! " + str(ve)
@@ -398,7 +406,8 @@ class GUIApplication(Ui_MainWindow):
             self.geffe_fill_to(20000)
             try:
                 test1 = PokerTest(self._geffe_stream)
-                result = "Poker test passed: " + str(test1.run_test())
+                result = "Poker test("+f"{n+1}".rjust(2, " ") \
+                    + ") passed: " + str(test1.run_test())
 
             except ValueError as ve:
                 result = "Error! " + str(ve)
@@ -414,7 +423,8 @@ class GUIApplication(Ui_MainWindow):
             self.stopandgo_fill_to(20000)
             try:
                 test1 = PokerTest(self._stopandgo_stream)
-                result = "Poker test passed: " + str(test1.run_test())
+                result = "Poker test("+f"{n+1}".rjust(2, " ") \
+                    + ") passed: " + str(test1.run_test())
 
             except ValueError as ve:
                 result = "Error! " + str(ve)
@@ -431,7 +441,8 @@ class GUIApplication(Ui_MainWindow):
             self.shrinking_fill_to(20000)
             try:
                 test1 = PokerTest(self._shrinking_stream)
-                result = "Poker test passed: " + str(test1.run_test())
+                result = "Poker test("+f"{n+1}".rjust(2, " ") \
+                    + ") passed: " + str(test1.run_test())
 
             except ValueError as ve:
                 result = "Error! " + str(ve)

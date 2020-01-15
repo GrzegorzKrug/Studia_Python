@@ -5,13 +5,16 @@ from collections import namedtuple
 class LinearFeedbackShiftRegister:
     def __init__(self, setup=None,
                  config=None, init_state=None, bit_size=8, xor_bit=-1):
-        if setup:
+        if not setup is None:
             # print("my setup: ", setup)
             try:
                 config = setup['config']
                 init_state = setup['init_state']
                 bit_size = setup['bit_size']
                 xor_bit = setup['xor_bit']
+
+            except TypeError as te:
+                print("TypeError: ", te)
 
             except NameError as ne:
                 print("Name error: ", ne)
@@ -65,7 +68,9 @@ class LinearFeedbackShiftRegister:
 
 
 class GeffeGenerator:
-    def __init__(self, reg1_setup=None, reg2_setup=None, reg3_setup=None):
+    default = {'bit_size': 16, 'config': 0, 'init_state': 0, 'xor_bit': 1}
+
+    def __init__(self, reg1_setup=default, reg2_setup=default, reg3_setup=default):
         self.reg1 = LinearFeedbackShiftRegister(setup=reg1_setup)
         self.reg2 = LinearFeedbackShiftRegister(setup=reg2_setup)
         self.reg3 = LinearFeedbackShiftRegister(setup=reg3_setup)
@@ -95,7 +100,9 @@ class GeffeGenerator:
 
 
 class StopAndGoGenerator:
-    def __init__(self, reg1_setup=None, reg2_setup=None, reg3_setup=None):
+    default = {'bit_size': 16, 'config': 0, 'init_state': 0, 'xor_bit': 1}
+
+    def __init__(self, reg1_setup=default, reg2_setup=default, reg3_setup=default):
         self.reg1 = LinearFeedbackShiftRegister(setup=reg1_setup)
         self.reg2 = LinearFeedbackShiftRegister(setup=reg2_setup)
         self.reg3 = LinearFeedbackShiftRegister(setup=reg3_setup)
@@ -130,7 +137,9 @@ class StopAndGoGenerator:
 
 
 class ShrinkingGenerator:
-    def __init__(self, reg1_setup=None, reg2_setup=None):
+    default = {'bit_size': 16, 'config': 0, 'init_state': 0, 'xor_bit': 1}
+
+    def __init__(self, reg1_setup=default, reg2_setup=default):
         self.reg1 = LinearFeedbackShiftRegister(setup=reg1_setup)
         self.reg2 = LinearFeedbackShiftRegister(setup=reg2_setup)
         self.max_size = max(reg1_setup['bit_size'],
