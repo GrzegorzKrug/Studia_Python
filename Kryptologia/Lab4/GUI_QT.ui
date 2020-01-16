@@ -760,7 +760,7 @@ Shrinking Generator</string>
            <string>0 is random value.</string>
           </property>
           <property name="text">
-           <string>0</string>
+           <string>-1</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -925,7 +925,7 @@ Shrinking Generator</string>
            <string>0 is random value.</string>
           </property>
           <property name="text">
-           <string>0</string>
+           <string>-1</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -1090,7 +1090,7 @@ Shrinking Generator</string>
            <enum>Qt::LeftToRight</enum>
           </property>
           <property name="text">
-           <string>0</string>
+           <string>-1</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>

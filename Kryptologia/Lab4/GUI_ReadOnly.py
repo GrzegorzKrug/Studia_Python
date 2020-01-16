@@ -639,7 +639,7 @@ class Ui_MainWindow(object):
         self.lineEdit_x1_config.setText(_translate("MainWindow", "0"))
         self.label_2.setText(_translate("MainWindow", "Initial state"))
         self.lineEdit_x1_init_state.setToolTip(_translate("MainWindow", "0 is random value."))
-        self.lineEdit_x1_init_state.setText(_translate("MainWindow", "0"))
+        self.lineEdit_x1_init_state.setText(_translate("MainWindow", "-1"))
         self.label_16.setText(_translate("MainWindow", "XOR bit"))
         self.label_9.setText(_translate("MainWindow", "x2 Register Size"))
         self.label_7.setText(_translate("MainWindow", "LFSR Config"))
@@ -647,7 +647,7 @@ class Ui_MainWindow(object):
         self.lineEdit_x2_config.setText(_translate("MainWindow", "0"))
         self.label_8.setText(_translate("MainWindow", "Initial state"))
         self.lineEdit_x2_init_state.setToolTip(_translate("MainWindow", "0 is random value."))
-        self.lineEdit_x2_init_state.setText(_translate("MainWindow", "0"))
+        self.lineEdit_x2_init_state.setText(_translate("MainWindow", "-1"))
         self.label_18.setText(_translate("MainWindow", "XOR bit"))
         self.label_4.setText(_translate("MainWindow", "x3 Registers Size"))
         self.label_6.setText(_translate("MainWindow", "LFSR Config"))
@@ -655,7 +655,7 @@ class Ui_MainWindow(object):
         self.lineEdit_x3_config.setText(_translate("MainWindow", "0"))
         self.label_5.setText(_translate("MainWindow", "Initial state"))
         self.lineEdit_x3_init_state.setToolTip(_translate("MainWindow", "0 is random value."))
-        self.lineEdit_x3_init_state.setText(_translate("MainWindow", "0"))
+        self.lineEdit_x3_init_state.setText(_translate("MainWindow", "-1"))
         self.label_17.setText(_translate("MainWindow", "XOR bit"))
 
 

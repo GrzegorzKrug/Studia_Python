@@ -22,7 +22,7 @@ class LinearFeedbackShiftRegister:
         self._bit_size = bit_size
         self._max_num = 2**bit_size - 1
 
-        if (not init_state is None) and init_state != 0:
+        if (not init_state is None) and init_state >= 0:
             try:
                 init_state = int(init_state)
             except ValueError:
@@ -65,7 +65,7 @@ class LinearFeedbackShiftRegister:
 
 
 class GeffeGenerator:
-    default = {'bit_size': 16, 'config': 0, 'init_state': 0, 'xor_bit': 1}
+    default = {'bit_size': 16, 'config': 0, 'init_state': -1, 'xor_bit': 1}
 
     def __init__(self, reg1_setup=default, reg2_setup=default, reg3_setup=default):
         self.reg1 = LinearFeedbackShiftRegister(setup=reg1_setup)
@@ -97,7 +97,7 @@ class GeffeGenerator:
 
 
 class StopAndGoGenerator:
-    default = {'bit_size': 16, 'config': 0, 'init_state': 0, 'xor_bit': 1}
+    default = {'bit_size': 16, 'config': 0, 'init_state': -1, 'xor_bit': 1}
 
     def __init__(self, reg1_setup=default, reg2_setup=default, reg3_setup=default):
         self.reg1 = LinearFeedbackShiftRegister(setup=reg1_setup)
@@ -134,7 +134,7 @@ class StopAndGoGenerator:
 
 
 class ShrinkingGenerator:
-    default = {'bit_size': 16, 'config': 0, 'init_state': 0, 'xor_bit': 1}
+    default = {'bit_size': 16, 'config': 0, 'init_state': -1, 'xor_bit': 1}
 
     def __init__(self, reg1_setup=default, reg2_setup=default):
         self.reg1 = LinearFeedbackShiftRegister(setup=reg1_setup)
