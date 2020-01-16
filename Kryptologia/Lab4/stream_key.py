@@ -50,9 +50,6 @@ class LinearFeedbackShiftRegister:
         Point = namedtuple(name, ['config', 'bit_size', 'state'])
         return str(Point(f'0b{self.config[2:]:>08}', self._bit_size, self.state))
 
-    # def state(self):
-    #     pass
-
     def next_step(self):
         bin_state = bin(self.state)[2:].rjust(self._bit_size, '0')
         bin_config = self.config[2:].rjust(self._bit_size, '0')

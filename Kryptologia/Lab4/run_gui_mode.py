@@ -34,9 +34,9 @@ class GUIApplication(Ui_MainWindow):
         self.pushButton_geffe_fill.clicked.connect(
             lambda: self.geffe_fill_to(20000))
         self.pushButton_gefe_test_monobit.clicked.connect(
-            self.test_gefe_monobit)
+            self.test_geffe_monobit)
         self.pushButton_geffe_test_long_run.clicked.connect(
-            self.test_gefe_longrun)
+            self.test_geffe_longrun)
 
         self.pushButton_new_stopandgo.clicked.connect(self.new_stopandgo)
         self.pushButton_stopandgo_next.clicked.connect(self.next_stopandgo)
@@ -66,7 +66,7 @@ class GUIApplication(Ui_MainWindow):
         self.pushButton_shrinking_clear.clicked.connect(
             self.clear_shrinking_results)
 
-        self.pushButton_geffe_poker.clicked.connect(self.test_gefe_poker)
+        self.pushButton_geffe_poker.clicked.connect(self.test_geffe_poker)
         self.pushButton_stopandgo_poker.clicked.connect(
             self.test_stopandgo_poker)
         self.pushButton_shrinking_poker.clicked.connect(
@@ -292,164 +292,239 @@ class GUIApplication(Ui_MainWindow):
             text = '\n'.join(text)
             self.text_shrinking_state.setText(text)
 
-    def test_gefe_monobit(self):
-        for n in range(10):
+    def test_geffe_monobit(self):
+        N = self.spinBox_geffe_test_num.value()
+        pass_ratio = 0
+        text = ''
+        for n in range(N):
             if len(self._geffe_stream) >= 20000 \
                     or len(self._geffe_stream) < 1:
                 self.new_geffe()
             self.geffe_fill_to(20000)
             try:
                 test1 = MonoBitTest(self._geffe_stream)
-                result = "Mono Bit("+f"{n+1}".rjust(2, " ") \
-                    + ") passed: " + str(test1.run_test())
+                res = test1.run_test()
+                if res:
+                    pass_ratio += 1
+                text += "Mono Bit("+f"{n+1}".rjust(3, " ") \
+                    + ") passed: " + str(res) + "\n"
 
             except ValueError as ve:
-                result = "Error! " + str(ve)
+                text += "Error! " + str(ve) + "\n"
 
-            old_text = self.textBrowser_geffe_results.toPlainText()
-            self.textBrowser_geffe_results.setText(result + "\n" + old_text)
+        text += f"Passed {pass_ratio} of {N}\n"
+        text += f"Passratio = {round(pass_ratio/N*100,2)} %\n"
+
+        old_text = self.textBrowser_geffe_results.toPlainText()
+        self.textBrowser_geffe_results.setText(text + "\n" + old_text)
 
     def test_stopandgo_monobit(self):
-        for n in range(10):
+        N = self.spinBox_stopandgo_test_num.value()
+        pass_ratio = 0
+        text = ''
+        for n in range(N):
             if len(self._stopandgo_stream) >= 20000 \
                     or len(self._stopandgo_stream) < 1:
                 self.new_stopandgo()
             self.stopandgo_fill_to(20000)
             try:
                 test1 = MonoBitTest(self._stopandgo_stream)
-                result = "Mono Bit("+f"{n+1}".rjust(2, " ") \
-                    + ") passed: " + str(test1.run_test())
+                res = test1.run_test()
+                if res:
+                    pass_ratio += 1
+                text += "Mono Bit("+f"{n+1}".rjust(3, " ") \
+                    + ") passed: " + str(res) + "\n"
 
             except ValueError as ve:
-                result = "Error! " + str(ve)
+                text += "Error! " + str(ve) + "\n"
 
-            old_text = self.textBrowser_stopandgo_results.toPlainText()
-            self.textBrowser_stopandgo_results.setText(result
-                                                       + "\n"+old_text)
+        text += f"Passed {pass_ratio} of {N}\n"
+        text += f"Passratio = {round(pass_ratio/N*100,2)} %\n"
+
+        old_text = self.textBrowser_stopandgo_results.toPlainText()
+        self.textBrowser_stopandgo_results.setText(text + "\n" + old_text)
 
     def test_shrinking_monobit(self):
-        for n in range(10):
+        N = self.spinBox_shrinking_test_num.value()
+        pass_ratio = 0
+        text = ''
+        for n in range(N):
             if len(self._shrinking_stream) >= 20000  \
                     or len(self._shrinking_stream) < 1:
                 self.new_shrinking()
             self.shrinking_fill_to(20000)
             try:
                 test1 = MonoBitTest(self._shrinking_stream)
-                result = "Mono Bit("+f"{n+1}".rjust(2, " ") \
-                    + ") passed: " + str(test1.run_test())
+                res = test1.run_test()
+                if res:
+                    pass_ratio += 1
+                text += "Mono Bit("+f"{n+1}".rjust(3, " ") \
+                    + ") passed: " + str(res) + "\n"
 
             except ValueError as ve:
-                result = "Error! " + str(ve)
+                text += "Error! " + str(ve) + "\n"
 
-            old_text = self.textBrowser_shrinking_results.toPlainText()
-            self.textBrowser_shrinking_results.setText(result
-                                                       + "\n"+old_text)
+        text += f"Passed {pass_ratio} of {N}\n"
+        text += f"Passratio = {round(pass_ratio/N*100,2)} %\n"
 
-    def test_gefe_longrun(self):
-        for n in range(10):
+        old_text = self.textBrowser_shrinking_results.toPlainText()
+        self.textBrowser_shrinking_results.setText(text + "\n" + old_text)
+
+    def test_geffe_longrun(self):
+        N = self.spinBox_geffe_test_num.value()
+        pass_ratio = 0
+        text = ''
+        for n in range(N):
             if len(self._geffe_stream) >= 20000 \
                     or len(self._geffe_stream) < 1:
                 self.new_geffe()
             self.geffe_fill_to(20000)
             try:
-                test1 = LongRunTest(self._geffe_stream)                
-                result = "Long Runs("+f"{n+1}".rjust(2, " ") \
-                    + ") passed: " + str(test1.run_test())
+                test1 = LongRunTest(self._geffe_stream)
+                res = test1.run_test()
+                if res:
+                    pass_ratio += 1
+                text += "Long Runs("+f"{n+1}".rjust(3, " ") \
+                    + ") passed: " + str(res) + "\n"
 
             except ValueError as ve:
-                result = "Error! " + str(ve)
+                text += "Error! " + str(ve) + "\n"
 
-            old_text = self.textBrowser_geffe_results.toPlainText()
-            self.textBrowser_geffe_results.setText(result + "\n" + old_text)
+        text += f"Passed {pass_ratio} of {N}\n"
+        text += f"Passratio = {round(pass_ratio/N*100,2)} %\n"
+
+        old_text = self.textBrowser_geffe_results.toPlainText()
+        self.textBrowser_geffe_results.setText(text + "\n" + old_text)
 
     def test_stopandgo_longrun(self):
-        for n in range(10):
+        N = self.spinBox_stopandgo_test_num.value()
+        pass_ratio = 0
+        text = ''
+        for n in range(N):
             if len(self._stopandgo_stream) >= 20000 \
                     or len(self._stopandgo_stream) < 1:
                 self.new_stopandgo()
             self.stopandgo_fill_to(20000)
             try:
                 test1 = LongRunTest(self._stopandgo_stream)
-                result = "Long Runs("+f"{n+1}".rjust(2, " ") \
-                    + ") passed: " + str(test1.run_test())
+                res = test1.run_test()
+                if res:
+                    pass_ratio += 1
+                text += "Long Runs("+f"{n+1}".rjust(3, " ") \
+                    + ") passed: " + str(res) + "\n"
 
             except ValueError as ve:
-                result = "Error! " + str(ve)
+                text += "Error! " + str(ve) + "\n"
 
-            old_text = self.textBrowser_stopandgo_results.toPlainText()
-            self.textBrowser_stopandgo_results.setText(result
-                                                       + "\n"+old_text)
+        text += f"Passed {pass_ratio} of {N}\n"
+        text += f"Passratio = {round(pass_ratio/N*100,2)} %\n"
+
+        old_text = self.textBrowser_stopandgo_results.toPlainText()
+        self.textBrowser_stopandgo_results.setText(text + "\n" + old_text)
 
     def test_shrinking_longrun(self):
-        for n in range(10):
+        N = self.spinBox_shrinking_test_num.value()
+        pass_ratio = 0
+        text = ''
+        for n in range(N):
             if len(self._shrinking_stream) >= 20000  \
                     or len(self._shrinking_stream) < 1:
                 self.new_shrinking()
             self.shrinking_fill_to(20000)
             try:
                 test1 = LongRunTest(self._shrinking_stream)
-                result = "Long Runs("+f"{n+1}".rjust(2, " ") \
-                    + ") passed: " + str(test1.run_test())
+                res = test1.run_test()
+                if res:
+                    pass_ratio += 1
+                text += "Long Runs("+f"{n+1}".rjust(3, " ") \
+                    + ") passed: " + str(res) + "\n"
 
             except ValueError as ve:
-                result = "Error! " + str(ve)
+                text += "Error! " + str(ve) + "\n"
 
-            old_text = self.textBrowser_shrinking_results.toPlainText()
-            self.textBrowser_shrinking_results.setText(result
-                                                       + "\n"+old_text)
+        text += f"Passed {pass_ratio} of {N}\n"
+        text += f"Passratio = {round(pass_ratio/N*100,2)} %\n"
 
-    def test_gefe_poker(self):
-        for n in range(10):
+        old_text = self.textBrowser_shrinking_results.toPlainText()
+        self.textBrowser_shrinking_results.setText(text + "\n" + old_text)
+
+    def test_geffe_poker(self):
+        N = self.spinBox_geffe_test_num.value()
+        pass_ratio = 0
+        text = ''
+        for n in range(N):
             if len(self._geffe_stream) >= 20000 \
                     or len(self._geffe_stream) < 1:
                 self.new_geffe()
             self.geffe_fill_to(20000)
             try:
                 test1 = PokerTest(self._geffe_stream)
-                result = "Poker test("+f"{n+1}".rjust(2, " ") \
-                    + ") passed: " + str(test1.run_test())
+                res = test1.run_test()
+                if res:
+                    pass_ratio += 1
+                text += "Poker test("+f"{n+1}".rjust(3, " ") \
+                    + ") passed: " + str(res) + "\n"
 
             except ValueError as ve:
-                result = "Error! " + str(ve)
+                text += "Error! " + str(ve) + "\n"
 
-            old_text = self.textBrowser_geffe_results.toPlainText()
-            self.textBrowser_geffe_results.setText(result + "\n" + old_text)
+        text += f"Passed {pass_ratio} of {N}\n"
+        text += f"Passratio = {round(pass_ratio/N*100,2)} %\n"
+
+        old_text = self.textBrowser_geffe_results.toPlainText()
+        self.textBrowser_geffe_results.setText(text + "\n" + old_text)
 
     def test_stopandgo_poker(self):
-        for n in range(10):
+        N = self.spinBox_stopandgo_test_num.value()
+        pass_ratio = 0
+        text = ''
+        for n in range(N):
             if len(self._stopandgo_stream) >= 20000 \
                     or len(self._stopandgo_stream) < 1:
                 self.new_stopandgo()
             self.stopandgo_fill_to(20000)
             try:
                 test1 = PokerTest(self._stopandgo_stream)
-                result = "Poker test("+f"{n+1}".rjust(2, " ") \
-                    + ") passed: " + str(test1.run_test())
+                res = test1.run_test()
+                if res:
+                    pass_ratio += 1
+                text += "Poker test("+f"{n+1}".rjust(3, " ") \
+                    + ") passed: " + str(res) + "\n"
 
             except ValueError as ve:
-                result = "Error! " + str(ve)
+                text += "Error! " + str(ve) + "\n"
 
-            old_text = self.textBrowser_stopandgo_results.toPlainText()
-            self.textBrowser_stopandgo_results.setText(result
-                                                       + "\n"+old_text)
+        text += f"Passed {pass_ratio} of {N}\n"
+        text += f"Passratio = {round(pass_ratio/N*100,2)} %\n"
+
+        old_text = self.textBrowser_stopandgo_results.toPlainText()
+        self.textBrowser_stopandgo_results.setText(text + "\n" + old_text)
 
     def test_shrinking_poker(self):
-        for n in range(10):
+        N = self.spinBox_shrinking_test_num.value()
+        pass_ratio = 0
+        text = ''
+        for n in range(N):
             if len(self._shrinking_stream) >= 20000  \
                     or len(self._shrinking_stream) < 1:
                 self.new_shrinking()
             self.shrinking_fill_to(20000)
             try:
                 test1 = PokerTest(self._shrinking_stream)
-                result = "Poker test("+f"{n+1}".rjust(2, " ") \
-                    + ") passed: " + str(test1.run_test())
+                res = test1.run_test()
+                if res:
+                    pass_ratio += 1
+                text += "Poker test("+f"{n+1}".rjust(3, " ") \
+                    + ") passed: " + str(test1.run_test()) + "\n"
 
             except ValueError as ve:
-                result = "Error! " + str(ve)
+                text += "Error! " + str(ve) + "\n"
 
-            old_text = self.textBrowser_shrinking_results.toPlainText()
-            self.textBrowser_shrinking_results.setText(result
-                                                       + "\n"+old_text)
+        text += f"Passed {pass_ratio} of {N}\n"
+        text += f"Passratio = {round(pass_ratio/N*100,2)} %\n"
+
+        old_text = self.textBrowser_shrinking_results.toPlainText()
+        self.textBrowser_shrinking_results.setText(text + "\n" + old_text)
 
 
 if QtCore.QT_VERSION >= 0x50501:  # Showing traceback from crashes
