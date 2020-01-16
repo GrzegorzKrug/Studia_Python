@@ -306,13 +306,13 @@ class GUIApplication(Ui_MainWindow):
                 res = test1.run_test()
                 if res:
                     pass_ratio += 1
-                text += "Mono Bit("+f"{n+1}".rjust(3, " ") \
-                    + ") passed: " + str(res) + "\n"
+                # text += "Mono Bit("+f"{n+1}".rjust(3, " ") \
+                #     + ") passed: " + str(res) + "\n"
 
             except ValueError as ve:
                 text += "Error! " + str(ve) + "\n"
 
-        text += f"Passed {pass_ratio} of {N}\n"
+        text += f"Mono bit passed {pass_ratio} of {N}\n"
         text += f"Passratio = {round(pass_ratio/N*100,2)} %\n"
 
         old_text = self.textBrowser_geffe_results.toPlainText()
@@ -332,13 +332,13 @@ class GUIApplication(Ui_MainWindow):
                 res = test1.run_test()
                 if res:
                     pass_ratio += 1
-                text += "Mono Bit("+f"{n+1}".rjust(3, " ") \
-                    + ") passed: " + str(res) + "\n"
+                # text += "Mono Bit("+f"{n+1}".rjust(3, " ") \
+                #     + ") passed: " + str(res) + "\n"
 
             except ValueError as ve:
                 text += "Error! " + str(ve) + "\n"
 
-        text += f"Passed {pass_ratio} of {N}\n"
+        text += f"Mono bit passed {pass_ratio} of {N}\n"
         text += f"Passratio = {round(pass_ratio/N*100,2)} %\n"
 
         old_text = self.textBrowser_stopandgo_results.toPlainText()
@@ -358,13 +358,13 @@ class GUIApplication(Ui_MainWindow):
                 res = test1.run_test()
                 if res:
                     pass_ratio += 1
-                text += "Mono Bit("+f"{n+1}".rjust(3, " ") \
-                    + ") passed: " + str(res) + "\n"
+                # text += "Mono Bit("+f"{n+1}".rjust(3, " ") \
+                #     + ") passed: " + str(res) + "\n"
 
             except ValueError as ve:
                 text += "Error! " + str(ve) + "\n"
 
-        text += f"Passed {pass_ratio} of {N}\n"
+        text += f"Mono bit passed {pass_ratio} of {N}\n"
         text += f"Passratio = {round(pass_ratio/N*100,2)} %\n"
 
         old_text = self.textBrowser_shrinking_results.toPlainText()
@@ -384,13 +384,13 @@ class GUIApplication(Ui_MainWindow):
                 res = test1.run_test()
                 if res:
                     pass_ratio += 1
-                text += "Long Runs("+f"{n+1}".rjust(3, " ") \
-                    + ") passed: " + str(res) + "\n"
+                # text += "Long Runs("+f"{n+1}".rjust(3, " ") \
+                #     + ") passed: " + str(res) + "\n"
 
             except ValueError as ve:
                 text += "Error! " + str(ve) + "\n"
 
-        text += f"Passed {pass_ratio} of {N}\n"
+        text += f"Long runs passed {pass_ratio} of {N}\n"
         text += f"Passratio = {round(pass_ratio/N*100,2)} %\n"
 
         old_text = self.textBrowser_geffe_results.toPlainText()
@@ -410,13 +410,13 @@ class GUIApplication(Ui_MainWindow):
                 res = test1.run_test()
                 if res:
                     pass_ratio += 1
-                text += "Long Runs("+f"{n+1}".rjust(3, " ") \
-                    + ") passed: " + str(res) + "\n"
+                # text += "Long Runs("+f"{n+1}".rjust(3, " ") \
+                #     + ") passed: " + str(res) + "\n"
 
             except ValueError as ve:
                 text += "Error! " + str(ve) + "\n"
 
-        text += f"Passed {pass_ratio} of {N}\n"
+        text += f"Long runs passed {pass_ratio} of {N}\n"
         text += f"Passratio = {round(pass_ratio/N*100,2)} %\n"
 
         old_text = self.textBrowser_stopandgo_results.toPlainText()
@@ -436,13 +436,13 @@ class GUIApplication(Ui_MainWindow):
                 res = test1.run_test()
                 if res:
                     pass_ratio += 1
-                text += "Long Runs("+f"{n+1}".rjust(3, " ") \
-                    + ") passed: " + str(res) + "\n"
+                # text += "Long Runs("+f"{n+1}".rjust(3, " ") \
+                #     + ") passed: " + str(res) + "\n"
 
             except ValueError as ve:
                 text += "Error! " + str(ve) + "\n"
 
-        text += f"Passed {pass_ratio} of {N}\n"
+        text += f"Long runs passed {pass_ratio} of {N}\n"
         text += f"Passratio = {round(pass_ratio/N*100,2)} %\n"
 
         old_text = self.textBrowser_shrinking_results.toPlainText()
@@ -462,13 +462,13 @@ class GUIApplication(Ui_MainWindow):
                 res = test1.run_test()
                 if res:
                     pass_ratio += 1
-                text += "Poker test("+f"{n+1}".rjust(3, " ") \
-                    + ") passed: " + str(res) + "\n"
+                # text += "Poker test("+f"{n+1}".rjust(3, " ") \
+                #     + ") passed: " + str(res) + "\n"
 
             except ValueError as ve:
                 text += "Error! " + str(ve) + "\n"
 
-        text += f"Passed {pass_ratio} of {N}\n"
+        text += f"Poker test passed {pass_ratio} of {N}\n"
         text += f"Passratio = {round(pass_ratio/N*100,2)} %\n"
 
         old_text = self.textBrowser_geffe_results.toPlainText()
@@ -488,13 +488,13 @@ class GUIApplication(Ui_MainWindow):
                 res = test1.run_test()
                 if res:
                     pass_ratio += 1
-                text += "Poker test("+f"{n+1}".rjust(3, " ") \
-                    + ") passed: " + str(res) + "\n"
+                # text += "Poker test("+f"{n+1}".rjust(3, " ") \
+                #     + ") passed: " + str(res) + "\n"
 
             except ValueError as ve:
                 text += "Error! " + str(ve) + "\n"
 
-        text += f"Passed {pass_ratio} of {N}\n"
+        text += f"Poker test passed {pass_ratio} of {N}\n"
         text += f"Passratio = {round(pass_ratio/N*100,2)} %\n"
 
         old_text = self.textBrowser_stopandgo_results.toPlainText()
@@ -514,13 +514,13 @@ class GUIApplication(Ui_MainWindow):
                 res = test1.run_test()
                 if res:
                     pass_ratio += 1
-                text += "Poker test("+f"{n+1}".rjust(3, " ") \
-                    + ") passed: " + str(test1.run_test()) + "\n"
+                # text += "Poker test("+f"{n+1}".rjust(3, " ") \
+                #     + ") passed: " + str(test1.run_test()) + "\n"
 
             except ValueError as ve:
                 text += "Error! " + str(ve) + "\n"
 
-        text += f"Passed {pass_ratio} of {N}\n"
+        text += f"Poker test passed {pass_ratio} of {N}\n"
         text += f"Passratio = {round(pass_ratio/N*100,2)} %\n"
 
         old_text = self.textBrowser_shrinking_results.toPlainText()
