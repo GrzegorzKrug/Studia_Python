@@ -146,7 +146,7 @@ pay_list2 = ["Trump buys wall",
              "Iran buys rockets",
              "Elon invest in GIGA factory"]
 
-J = 5
+J = 3
 BC = BitCoinBlock()
 
 
@@ -162,7 +162,12 @@ block2 = BC.next_Block(pay_list2, block1, J=J)
 pretty_print(block2)
 # for x in range(5):
 #     abc.find_hash(test_string, 5)
+prev_block = block2
 
+# for x in range(50):
+#     next_block = BC.next_Block("", prev_block, J=J)
+#     pretty_print(next_block)
+#     prev_block = next_block
 
 val = validate([init_block, block1, block2])
 print("Validate:", val)
