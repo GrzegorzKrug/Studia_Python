@@ -36,8 +36,13 @@ class ModularInverse:
 
 
 secret_text = "my_secret_text"
-secret_byte = secret_text.encode()
+secret_byte = secret_text.encode('utf-8')
 # b"abcde".decode("utf-8")
+
+for i, byte in enumerate(secret_byte):
+    print(i, byte)
+    secret_byte[i] += 1
+
 
 key = RSA.generate(2048)
 
